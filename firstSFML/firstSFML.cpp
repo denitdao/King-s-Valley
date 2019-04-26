@@ -12,7 +12,7 @@ int main() {
 	Block controller;
 	Block map[MAP_SIZE_X][MAP_SIZE_Y];
 	controller.openMap(map, "level_1_blocks.txt");
-	//Sleep(5000);
+	Sleep(5000);
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
 	window.setFramerateLimit(200);
