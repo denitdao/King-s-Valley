@@ -1,31 +1,41 @@
-#pragma once
+п»ї#pragma once
 #include "pch.h"
 
 class Hero : public Actor {
 	enum heroMovement move;
 public:
-	Hero(sf::Vector2f size) : Actor(size) { // конструктор, получаем размер
+	Hero(sf::Vector2f size) : Actor(size) { // ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°, ГЇГ®Г«ГіГ·Г ГҐГ¬ Г°Г Г§Г¬ГҐГ°
 		object.setFillColor(sf::Color::Yellow);
 	}
 	void controle() {
-		if (inJump == false) {
+		if (inJump == false && !lock) {
 			setDir(none);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) { // go right
 				setDir(toright);
-				moveOn({ x_move_speed, 0 });
+				if (collision != rcoll && onGround) {
+					moveOn({ x_move_speed, 0 });
+				}
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) { // go left
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) { // go left				
 				setDir(toleft);
-				moveOn({ x_move_speed, 0 });
+				if (collision != lcoll && onGround) {
+					moveOn({ x_move_speed, 0 });
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { // jump
-				moveOn({ 0, -x_move_speed * 10.f });
+				if (collision != tcoll)
+					moveOn({ 0, -x_move_speed * 5.0f });
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) { // jump
+
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) { // jump
+			//if (onGround)
+			if (!lock)
 				inJump = true;
-			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
+
+			inJump = false;
 			setPos({ 500, 536 });
 		}
 		jump();

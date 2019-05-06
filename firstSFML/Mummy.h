@@ -1,10 +1,10 @@
-#pragma once
+п»ї#pragma once
 #include "pch.h"
 
 class Mummy : public Actor {
 	enum mummyMovement move;
 public:
-	Mummy(sf::Vector2f size) : Actor(size) { // конструктор, получаем размер
+	Mummy(sf::Vector2f size) : Actor(size) { // Д™Г®Г­Е„Е€Д‘ГіД™Е€Г®Д‘, ДЏГ®Г«ГіГ·Е•ДєД› Д‘Е•Г§Д›ДєД‘
 		object.setFillColor(sf::Color::White);
 	}
 

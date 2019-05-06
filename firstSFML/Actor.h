@@ -1,16 +1,16 @@
-#pragma once
+п»ї#pragma once
 #include "pch.h"
-// файл, хранящий описание класса "Персонаж"
+// ГґГ Г©Г«, ГµГ°Г Г­ГїГ№ГЁГ© Г®ГЇГЁГ±Г Г­ГЁГҐ ГЄГ«Г Г±Г±Г  "ГЏГҐГ°Г±Г®Г­Г Г¦"
 
 class Actor : public Block {
 protected:
 	t_direcrion dir;
 	float yJumpSpeed = gravity_speed;
-	const int groundHeight = 600; // костыль
+	const int groundHeight = 600; // ГЄГ®Г±ГІГ»Г«Гј
 public:
 	t_condition cond;
 	bool inJump = false;
-	Actor(sf::Vector2f size) : Block(size) { // конструктор, получаем размер
+	Actor(sf::Vector2f size) : Block(size) { //
 		object.setFillColor(sf::Color::Blue);
 		dir = none;
 	}

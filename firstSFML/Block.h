@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "pch.h"
 #include <fstream>
 #include <iostream>
@@ -11,19 +11,25 @@ protected:
 	t_collided collision;
 	t_texture skin = wall;
 public:
+	bool onGround = true;
+	bool lock = true;
 	sf::Vector2f senterCoord;
 	Block() {
 		//object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
 	}
-	Block(sf::Vector2f size) { // конструктор, получаем размер
-		object.setSize(size); // передаем полученные размеры
+	Block(sf::Vector2f size) { // ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°, ГЇГ®Г«ГіГ·Г ГҐГ¬ Г°Г Г§Г¬ГҐГ°
+		object.setSize(size); // ГЇГҐГ°ГҐГ¤Г ГҐГ¬ ГЇГ®Г«ГіГ·ГҐГ­Г­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г»
 		object.setFillColor(sf::Color::Green);
 	}
-//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
+	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
 	void annulateCollision() { // at the beginning of the lap, no collision
 		collision = no;
+		onGround = false;
+		if (!lock)
+			lock = false;
 	}
-	void create(t_texture nskin) { // альтернативный конструктор, получаем размер
+
+	void create(t_texture nskin) { // Г Г«ГјГІГҐГ°Г­Г ГІГЁГўГ­Г»Г© ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°, ГЇГ®Г«ГіГ·Г ГҐГ¬ Г°Г Г§Г¬ГҐГ°
 		skin = nskin;
 		switch (skin) {
 		case noTexture: {
@@ -78,6 +84,12 @@ public:
 		senterCoord.y = object.getPosition().y + object.getSize().y / 2;
 		return { senterCoord.x , senterCoord.y };
 	}
+	float getCoordX() {
+		return object.getPosition().x;
+	}
+	float getCoordY() {
+		return object.getPosition().y;
+	}
 	void drawTo(sf::RenderWindow &window) {
 		if (skin != noTexture)
 			window.draw(object);
@@ -100,11 +112,11 @@ public:
 	void drawTo(sf::RenderWindow &window, Block newMap[MAP_SIZE_X][MAP_SIZE_Y]) {
 		for (int j = 0; j < MAP_SIZE_Y; j++) { // all except stair parts
 			for (int i = 0; i < MAP_SIZE_X; i++) {
-				if(newMap[i][j].getTexture() != stairLeftTop 
+				if (newMap[i][j].getTexture() != stairLeftTop
 					|| newMap[i][j].getTexture() != stairRightTop
 					|| newMap[i][j].getTexture() != stairLeftUnder
 					|| newMap[i][j].getTexture() != stairRightUnder)
-				newMap[i][j].drawTo(window);
+					newMap[i][j].drawTo(window);
 			}
 		}
 		for (int j = 0; j < MAP_SIZE_Y; j++) {
