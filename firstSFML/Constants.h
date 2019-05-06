@@ -21,9 +21,9 @@ static float gravity_speed = -9.45f;
 static float x_move_speed = 0.2f;
 static float jump_change_step = 0.001f;
 
-constexpr float GRAVITY_SPEED_CONST = -6.0f;
-constexpr float X_MOVE_SPEED_CONST = 4.0f;
-constexpr float JUMP_CHANGE_STEP_CONST = 0.195f;
+constexpr float GRAVITY_SPEED_CONST = -3.0f;
+constexpr float X_MOVE_SPEED_CONST = 1.0f;
+constexpr float JUMP_CHANGE_STEP_CONST = 0.05f;
 
 // enums
 typedef enum direction { toleft = -1, none = 0, toright = 1 } t_direcrion;

@@ -1,12 +1,12 @@
 ﻿#pragma once
 #include "pch.h"
-// ôàéë, õðàíÿùèé îïèñàíèå êëàññà "Ïåðñîíàæ"
+//
 
 class Actor : public Block {
 protected:
 	t_direcrion dir;
 	float yJumpSpeed = gravity_speed;
-	const int groundHeight = 600; // êîñòûëü
+	const int groundHeight = 600; //
 public:
 	t_condition cond;
 	bool inJump = false;
@@ -53,6 +53,9 @@ public:
 	}
 
 	void checkCollision(Block &obj2) {
+		t_texture objSkin = obj2.getTexture();
+		if (objSkin == 0)
+			return;
 		this->senterCalc();
 		obj2.senterCalc();
 		float deltaX = this->senterCoord.x - obj2.senterCoord.x;
@@ -69,7 +72,6 @@ public:
 					std::cout << "right intersect, move X on " << intersectX << std::endl;
 					setPos({ obj2.senterCoord.x - (this->getSizeX() + obj2.getSizeX() / 2) , this->getCoordY() });
 					//this->moveOn({ x_move_speed, 0 });
-					//comment
 				}
 				if (deltaX > 0) { // left intersect
 					collision = lcoll;
@@ -85,12 +87,14 @@ public:
 					inJump = false;
 					lock = false;
 					std::cout << "bottom intersect, move Y on " << intersectY << std::endl; // bottom intersect
-					this->moveOn({ 0, intersectY });
+					setPos({ this->getCoordX() , obj2.senterCoord.y - (this->getSizeY() + obj2.getSizeY() / 2) });
+					//this->moveOn({ 0, intersectY });
 				}
 				if (deltaY > 0) { // top intersect
 					collision = tcoll;
 					std::cout << "top intersect, move Y on " << -intersectY << std::endl;
-					this->moveOn({ 0, -intersectY });
+					setPos({ this->getCoordX(), obj2.senterCoord.y + obj2.getSizeY() / 2 });
+					//this->moveOn({ 0, -intersectY });
 				}
 			}
 			return;

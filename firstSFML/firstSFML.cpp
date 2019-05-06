@@ -23,7 +23,7 @@ int main() {
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
 	bot1.setPos({ 200.f,500.f });
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
-	bot2.setPos({ 400.f, 520.f });
+	bot2.setPos({ 240.f, 520.f });
 
 	// Gravity variables:
 	const int groundHeight = 600;
@@ -49,7 +49,22 @@ int main() {
 
 		player.annulateCollision(); // if won't be any collisions, value won't change fron 'no'
 
-		player.checkCollision(ground);
+		int xMap = player.senterCoord.x / MAP_SIZE_X;
+		int yMap = player.senterCoord.y / MAP_SIZE_X;
+
+		cout << "xMap = " << xMap << " yMap = " << yMap << endl;
+
+		player.checkCollision(map[xMap][yMap]); //pos of the player
+		player.checkCollision(map[xMap - 1][yMap - 1]); // left top
+		player.checkCollision(map[xMap][yMap - 1]); // top
+		player.checkCollision(map[xMap + 1][yMap - 1]);
+		player.checkCollision(map[xMap + 1][yMap]); // rigth
+		player.checkCollision(map[xMap][yMap + 1]); // bottom
+		player.checkCollision(map[xMap - 1][yMap + 1]); // b l
+		player.checkCollision(map[xMap + 1][yMap + 1]);// r b 
+		player.checkCollision(map[xMap - 1][yMap]); // left
+		
+		//player.checkCollision(ground);
 		player.checkCollision(bot1);
 		player.checkCollision(bot2);
 
@@ -57,9 +72,9 @@ int main() {
 
 		bot1.drawTo(window);
 		bot2.drawTo(window);
-		//controller.drawTo(window, map);
+		controller.drawTo(window, map);
 		player.drawTo(window);
-		ground.drawTo(window);
+		//ground.drawTo(window);
 
 		/*
 		elapsed = clock.restart().asMilliseconds();

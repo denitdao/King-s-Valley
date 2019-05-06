@@ -17,8 +17,8 @@ public:
 	Block() {
 		//object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
 	}
-	Block(sf::Vector2f size) { // êîíñòðóêòîð, ïîëó÷àåì ðàçìåð
-		object.setSize(size); // ïåðåäàåì ïîëó÷åííûå ðàçìåðû
+	Block(sf::Vector2f size) { //
+		object.setSize(size); //
 		object.setFillColor(sf::Color::Green);
 	}
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
@@ -29,7 +29,7 @@ public:
 			lock = false;
 	}
 
-	void create(t_texture nskin) { // àëüòåðíàòèâíûé êîíñòðóêòîð, ïîëó÷àåì ðàçìåð
+	void create(t_texture nskin) { //
 		skin = nskin;
 		switch (skin) {
 		case noTexture: {

@@ -4,7 +4,7 @@
 class Hero : public Actor {
 	enum heroMovement move;
 public:
-	Hero(sf::Vector2f size) : Actor(size) { // êîíñòðóêòîð, ïîëó÷àåì ðàçìåð
+	Hero(sf::Vector2f size) : Actor(size) { //
 		object.setFillColor(sf::Color::Yellow);
 	}
 	void controle() {
@@ -36,7 +36,7 @@ public:
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
 
 			inJump = false;
-			setPos({ 500, 536 });
+			setPos({ 450, 250 });
 		}
 		jump();
 	}
