@@ -69,6 +69,7 @@ public:
 					std::cout << "right intersect, move X on " << intersectX << std::endl;
 					setPos({ obj2.senterCoord.x- (this->getSizeX()  + obj2.getSizeX()/2 ) , this->getCoordY()});
 					//this->moveOn({ x_move_speed, 0 });
+					//comment
 				}
 				if (deltaX > 0) { // left intersect
 					collision = lcoll;
