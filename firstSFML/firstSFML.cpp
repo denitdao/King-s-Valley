@@ -12,18 +12,18 @@ int main() {
 	Block controller;
 	Block map[MAP_SIZE_X][MAP_SIZE_Y];
 	controller.openMap(map, "level_1_blocks.txt");
-	Sleep(5000);
+	//Sleep(5000);
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
-	window.setFramerateLimit(200);
+	//window.setFramerateLimit(400);
 
 	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
 	player.setPos({ 200.f, 200.f });
 
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
-	bot1.setPos({ 200.f, 300.f });
+	bot1.setPos({ 200.f,522.f });
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
-	bot2.setPos({ 550.f, 200.f });
+	bot2.setPos({ 400.f, 520.f });
 
 	// Gravity variables:
 	const int groundHeight = 600;
@@ -51,14 +51,15 @@ int main() {
 
 		player.checkCollision(ground);
 		player.checkCollision(bot1);
+		player.checkCollision(bot2);
 
 		window.clear();
 
 		bot1.drawTo(window);
-		//bot2.drawTo(window);
+		bot2.drawTo(window);
 		//controller.drawTo(window, map);
 		player.drawTo(window);
-		//ground.drawTo(window);
+		ground.drawTo(window);
 		
 		/*
 		elapsed = clock.restart().asMilliseconds();
@@ -70,7 +71,7 @@ int main() {
 		gravity_speed = GRAVITY_SPEED_CONST;
 		x_move_speed = X_MOVE_SPEED_CONST;
 		jump_change_step = JUMP_CHANGE_STEP_CONST;
-
+		
 		window.display();
 		
 	}

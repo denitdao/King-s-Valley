@@ -11,6 +11,8 @@ protected:
 	t_collided collision;
 	t_texture skin = wall;
 public:
+	bool onGround = true;
+	bool lock = true;
 	sf::Vector2f senterCoord;
 	Block() {
 		//object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
@@ -22,7 +24,11 @@ public:
 //noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
 	void annulateCollision() { // at the beginning of the lap, no collision
 		collision = no;
+		onGround = false;
+		if (!lock)
+		lock = false;
 	}
+	
 	void create(t_texture nskin) { // альтернативный конструктор, получаем размер
 		skin = nskin;
 		switch (skin) {
@@ -77,6 +83,12 @@ public:
 		senterCoord.x = object.getPosition().x + object.getSize().x / 2;
 		senterCoord.y = object.getPosition().y + object.getSize().y / 2;
 		return { senterCoord.x , senterCoord.y };
+	}
+	float getCoordX() {
+		return object.getPosition().x;
+	}
+	float getCoordY() {
+		return object.getPosition().y;
 	}
 	void drawTo(sf::RenderWindow &window) {
 		if (skin != noTexture)

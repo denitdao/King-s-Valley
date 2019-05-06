@@ -14,7 +14,7 @@ public:
 		object.setFillColor(sf::Color::Blue);
 		dir = none;
 	}
-	void moveOn(sf::Vector2f distance) { 
+	void moveOn(sf::Vector2f distance) {
 		distance.x *= dir;
 		object.move(distance);
 	}
@@ -24,23 +24,34 @@ public:
 	void initJumpSpeed() {
 		yJumpSpeed = gravity_speed;
 	}
+	int k = 0;
+
+	
+
 	void jump() {
-		std::cout << "inJump - " <<((inJump) ? "true" : "false") << std::endl;
+		
+		std::cout << "inJump - " << ((inJump) ? "true" : "false") << std::endl;
 		if (inJump == true) {
-			moveOn({x_move_speed, yJumpSpeed});
-			std::cout << "Jumping on { " << x_move_speed << " ; " << yJumpSpeed <<" }" << std::endl;
+			onGround = false;
+			moveOn({ x_move_speed, yJumpSpeed });
+			std::cout << "Jumping on { " << x_move_speed << " ; " << yJumpSpeed << " }" << std::endl;
 			yJumpSpeed += jump_change_step;
 		}
 		else {
-			if (collision != colliding)
-				std::cout << "Falling down, Y  " << -gravity_speed << std::endl;
-				moveOn({0, -gravity_speed });
+			std::cout << "Falling down, Y  " << -gravity_speed << std::endl;
+
+			moveOn({ 0, -gravity_speed });
+			if (collision == bcoll || collision == tcoll || collision == rcoll || collision == lcoll) {
+				initJumpSpeed();
+				lock = true;
+			}
+			
 		}
-		if (collision == colliding) {
-			initJumpSpeed();
+		if (collision == bcoll || collision == tcoll || collision == rcoll || collision == lcoll) {
 			inJump = false;
 		}
 	}
+
 	void checkCollision(Block &obj2) {
 		this->senterCalc();
 		obj2.senterCalc();
@@ -50,24 +61,33 @@ public:
 		float intersectY = abs(deltaY) - (this->getSizeY() / 2 + obj2.getSizeY() / 2); // < 0
 
 		if (intersectX < 0.0f && intersectY < 0.0f) {
-			collision = colliding;
+			//collision = colliding;
 			std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;
 			if (intersectY < intersectX) {
 				if (deltaX < 0) { // right intersect
+					collision = rcoll;
 					std::cout << "right intersect, move X on " << intersectX << std::endl;
-					this->moveOn({ intersectX, 0 });
+					setPos({ obj2.senterCoord.x- (this->getSizeX()  + obj2.getSizeX()/2 ) , this->getCoordY()});
+					//this->moveOn({ x_move_speed, 0 });
 				}
 				if (deltaX > 0) { // left intersect
-					std::cout << "left intersect, move X on " << -intersectX << std::endl;
-					this->moveOn({ -intersectX, 0 });
+					collision = lcoll;
+					std::cout << "left intersect, move X on " << intersectX << std::endl;
+					setPos({ obj2.senterCoord.x + obj2.getSizeX()/2, this->getCoordY() });
+					//this->moveOn({x_move_speed, 0 });
 				}
 			}
 			else {
 				if (deltaY < 0) {
+					collision = bcoll;
+					onGround = true;
+					inJump = false;
+					lock=false;
 					std::cout << "bottom intersect, move Y on " << intersectY << std::endl; // bottom intersect
 					this->moveOn({ 0, intersectY });
 				}
 				if (deltaY > 0) { // top intersect
+					collision = tcoll;
 					std::cout << "top intersect, move Y on " << -intersectY << std::endl;
 					this->moveOn({ 0, -intersectY });
 				}
