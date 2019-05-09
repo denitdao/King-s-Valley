@@ -12,8 +12,7 @@ protected:
 	t_texture skin = wall;
 public:
 	bool onGround = true;
-	bool lock = true;
-	sf::Vector2f senterCoord;
+	bool lockJump = true;
 	Block() {
 		//object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
 	}
@@ -25,10 +24,7 @@ public:
 	void annulateCollision() { // at the beginning of the lap, no collision
 		collision = no;
 		onGround = false;
-		if (!lock)
-			lock = false;
 	}
-
 	void create(t_texture nskin) { //
 		skin = nskin;
 		switch (skin) {
@@ -79,16 +75,11 @@ public:
 		}
 		}
 	}
-	sf::Vector2f senterCalc() { // return center of shape
-		senterCoord.x = object.getPosition().x + object.getSize().x / 2;
-		senterCoord.y = object.getPosition().y + object.getSize().y / 2;
-		return { senterCoord.x , senterCoord.y };
+	sf::Vector2f senterGet() { // return center of shape
+		return { object.getPosition().x + object.getSize().x / 2 , object.getPosition().y + object.getSize().y / 2 };
 	}
-	float getCoordX() {
-		return object.getPosition().x;
-	}
-	float getCoordY() {
-		return object.getPosition().y;
+	sf::Vector2f getCoord() {
+		return object.getPosition();
 	}
 	void drawTo(sf::RenderWindow &window) {
 		if (skin != noTexture)
@@ -96,12 +87,6 @@ public:
 	}
 	void setPos(sf::Vector2f newPosition) {
 		object.setPosition(newPosition);
-	}
-	float getSizeX() {
-		return object.getSize().x;
-	}
-	float getSizeY() {
-		return object.getSize().y;
 	}
 	sf::Vector2f getSize() {
 		return object.getSize();
@@ -113,9 +98,9 @@ public:
 		for (int j = 0; j < MAP_SIZE_Y; j++) { // all except stair parts
 			for (int i = 0; i < MAP_SIZE_X; i++) {
 				if (newMap[i][j].getTexture() != stairLeftTop
-					|| newMap[i][j].getTexture() != stairRightTop
-					|| newMap[i][j].getTexture() != stairLeftUnder
-					|| newMap[i][j].getTexture() != stairRightUnder)
+					&& newMap[i][j].getTexture() != stairRightTop
+					&& newMap[i][j].getTexture() != stairLeftUnder
+					&& newMap[i][j].getTexture() != stairRightUnder)
 					newMap[i][j].drawTo(window);
 			}
 		}
