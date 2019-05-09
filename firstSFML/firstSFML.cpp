@@ -7,15 +7,14 @@ using namespace std;
 
 int main() {
 	sf::Clock clock;
-	float elapsed;
-
+	float elapsed = 0, avg = 0;
 	Block controller;
 	Block map[MAP_SIZE_X][MAP_SIZE_Y];
 	controller.openMap(map, "level_1_blocks.txt");
 	//Sleep(5000);
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
-	//window.setFramerateLimit(400);
+	window.setFramerateLimit(100);
 
 	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
 	player.setPos({ 200.f, 200.f });
@@ -23,58 +22,49 @@ int main() {
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
 	bot1.setPos({ 200.f,500.f });
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
-	bot2.setPos({ 240.f, 520.f });
+	bot2.setPos({ 350.f, 320.f });
 
 	// Gravity variables:
-	const int groundHeight = 600;
 
-	Block ground({ WINDOW_SIZE_X , WINDOW_SIZE_Y - groundHeight });
-	ground.setPos({ 0, (float)groundHeight });
-
-	float i = 0;
+	int i = 10;
 	while (window.isOpen()) {
 		cout << "_______New Lap________" << endl;
-		sf::Event _event;
-		// keypress detection
-
-		// parameters
-		while (window.pollEvent(_event)) {
-			switch (_event.type) {
-			case sf::Event::Closed:
-				window.close();
-			}
-		}
-
-		player.controle();
+		
+		player.controle(window);
 
 		player.annulateCollision(); // if won't be any collisions, value won't change fron 'no'
+		bot1.annulateCollision();
+		bot2.annulateCollision();
 
-		int xMap = player.senterCoord.x / MAP_SIZE_X;
-		int yMap = player.senterCoord.y / MAP_SIZE_X;
+		int xMap = player.senterGet().x / BLOCK_SIZE_X;
+		int yMap = player.senterGet().y / BLOCK_SIZE_X;
 
 		cout << "xMap = " << xMap << " yMap = " << yMap << endl;
 
-		player.checkCollision(map[xMap][yMap]); //pos of the player
-		player.checkCollision(map[xMap - 1][yMap - 1]); // left top
-		player.checkCollision(map[xMap][yMap - 1]); // top
-		player.checkCollision(map[xMap + 1][yMap - 1]);
-		player.checkCollision(map[xMap + 1][yMap]); // rigth
+		// checking collision of player
+		//player.checkCollision(map[xMap][yMap]); //pos of the player
 		player.checkCollision(map[xMap][yMap + 1]); // bottom
-		player.checkCollision(map[xMap - 1][yMap + 1]); // b l
-		player.checkCollision(map[xMap + 1][yMap + 1]);// r b 
-		player.checkCollision(map[xMap - 1][yMap]); // left
+		if (!player.onLeftStair && !player.onRightStair) {
+			if (player.inJump == false) {
+				player.checkCollision(map[xMap - 1][yMap - 1]); // left top
+				player.checkCollision(map[xMap + 1][yMap - 1]); // right top
+				player.checkCollision(map[xMap][yMap - 1]); // top
+				player.checkCollision(map[xMap + 1][yMap]); // rigth
+				player.checkCollision(map[xMap - 1][yMap]); // left
+			}
+			player.checkCollision(map[xMap + 1][yMap + 1]);// r b 
+			player.checkCollision(map[xMap - 1][yMap + 1]); // b l
+		}
 		
-		//player.checkCollision(ground);
 		player.checkCollision(bot1);
 		player.checkCollision(bot2);
 
 		window.clear();
 
+		controller.drawTo(window, map);
 		bot1.drawTo(window);
 		bot2.drawTo(window);
-		controller.drawTo(window, map);
 		player.drawTo(window);
-		//ground.drawTo(window);
 
 		/*
 		elapsed = clock.restart().asMilliseconds();
@@ -83,12 +73,14 @@ int main() {
 		jump_change_step = JUMP_CHANGE_STEP_CONST * elapsed;
 		cout << elapsed << endl;
 		*/
+
+		/**/
 		gravity_speed = GRAVITY_SPEED_CONST;
 		x_move_speed = X_MOVE_SPEED_CONST;
 		jump_change_step = JUMP_CHANGE_STEP_CONST;
 
 		window.display();
-
+		i++;
 	}
 	return 0;
 }

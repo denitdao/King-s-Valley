@@ -167,7 +167,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="Collider.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Mummy.h" />
