@@ -20,11 +20,14 @@ constexpr float PLAYER_SIZE_Y = WINDOW_SIZE_Y / MAP_SIZE_Y * 2;
 static float gravity_speed = 0.f;
 static float x_move_speed = 0.f;
 static float jump_change_step = 0.f;
-
+//Denys
 constexpr float GRAVITY_SPEED_CONST = -2.7f;
 constexpr float X_MOVE_SPEED_CONST = 1.5f;
 constexpr float JUMP_CHANGE_STEP_CONST = 0.04f;
-
+//Alex
+constexpr float GRAVITY_SPEED_CONST1 = -4.7f;
+constexpr float X_MOVE_SPEED_CONST1 = 4.0f;
+constexpr float JUMP_CHANGE_STEP_CONST1 = 0.12f;
 // enums
 typedef enum direction { toleft = -1, none = 0, toright = 1 } t_direcrion;
 typedef enum condition { normal, inJump, onStairs } t_condition;

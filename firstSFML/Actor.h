@@ -1,5 +1,4 @@
-﻿#pragma once
-#include "pch.h"
+﻿#include "pch.h"
 //
 
 class Actor : public Block {
@@ -30,19 +29,20 @@ public:
 
 		std::cout << "inJump - " << ((inJump) ? "true" : "false") << std::endl;
 		if (inJump == true) {
-			onGround = false;
+			lockJump = true;
+			//onGround = false;
 			moveOn({ x_move_speed, yJumpSpeed });
 			std::cout << "Jumping on { " << x_move_speed << " ; " << yJumpSpeed << " }" << std::endl;
 			yJumpSpeed += jump_change_step;
+			if (yJumpSpeed >= 10)
+				yJumpSpeed = 0;
 		}
 		else {
 			std::cout << "Falling down, Y  " << -gravity_speed << std::endl;
-
+			lockJump = true;
 			moveOn({ 0, -gravity_speed });
-			if (collision == bColl || collision == tColl || collision == rColl || collision == lColl) {
+			if (collision == bColl) {
 				initJumpSpeed();
-				lockJump = true;
-				onGround = true;
 			}
 		}
 		if (collision == bColl || collision == tColl || collision == rColl || collision == lColl) {
@@ -80,8 +80,7 @@ public:
 				else {
 					if (deltaY < 0) { // bottom intersect
 						collision = bColl;
-						onGround = true;
-						inJump = false;
+						//inJump = false;
 						lockJump = false;
 						std::cout << "bottom intersect, move Y on " << intersectY << std::endl;
 						setPos({ this->getCoord().x , obj2.senterGet().y - (this->getSize().y + obj2.getSize().y / 2) });
@@ -94,43 +93,41 @@ public:
 				}
 				/*
 				if (objSkin == stairLeftUnder && (int)this->getCoord().x == (int)obj2.senterGet().x) {
-					if (this->upArrowPressed && this->dir == toleft) {
-						this->onLeftStair = true;
-					}
-					else {
-						this->onLeftStair = false;
-					}
-					cout << "change onLeftStair" << endl;
+				if (this->upArrowPressed && this->dir == toleft) {
+				this->onLeftStair = true;
 				}
-
+				else {
+				this->onLeftStair = false;
+				}
+				cout << "change onLeftStair" << endl;
+				}
 				if (objSkin == stairRightUnder) {
-					if (this->upArrowPressed && this->dir == toright) {
-						this->onRightStair = true;
-					}
-					else {
-						this->onRightStair = false;
-					}
-					cout << "change onRightStair" << endl;
+				if (this->upArrowPressed && this->dir == toright) {
+				this->onRightStair = true;
+				}
+				else {
+				this->onRightStair = false;
+				}
+				cout << "change onRightStair" << endl;
 				}
 				if (objSkin == stairLeftTop) {
-					if (this->downArrowPressed && this->dir == toright) {
-						this->onLeftStair = true;
-					}
-					else {
-						this->onLeftStair = false;
-					}
-					cout << "change onLeftStair" << endl;
+				if (this->downArrowPressed && this->dir == toright) {
+				this->onLeftStair = true;
+				}
+				else {
+				this->onLeftStair = false;
+				}
+				cout << "change onLeftStair" << endl;
 				}
 				if (objSkin == stairRightTop) {
-					if (this->downArrowPressed && this->dir == toleft) {
-						this->onRightStair = true;
-					}
-					else {
-						this->onRightStair = false;
-					}
-					cout << "change onRightStair" << endl;
+				if (this->downArrowPressed && this->dir == toleft) {
+				this->onRightStair = true;
 				}
-
+				else {
+				this->onRightStair = false;
+				}
+				cout << "change onRightStair" << endl;
+				}
 				cout << "onLeftStair = " << this->onLeftStair << endl;
 				cout << "onRightStair = " << this->onRightStair << endl;
 				*/

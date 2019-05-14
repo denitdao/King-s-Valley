@@ -11,7 +11,6 @@ protected:
 	t_collided collision;
 	t_texture skin = wall;
 public:
-	bool onGround = true;
 	bool lockJump = true;
 	Block() {
 		//object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
@@ -23,7 +22,6 @@ public:
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
 	void annulateCollision() { // at the beginning of the lap, no collision
 		collision = no;
-		onGround = false;
 	}
 	void create(t_texture nskin) { //
 		skin = nskin;

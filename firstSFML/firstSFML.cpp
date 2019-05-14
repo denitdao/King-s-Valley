@@ -75,10 +75,14 @@ int main() {
 		*/
 
 		/**/
+		//Denys
 		gravity_speed = GRAVITY_SPEED_CONST;
 		x_move_speed = X_MOVE_SPEED_CONST;
 		jump_change_step = JUMP_CHANGE_STEP_CONST;
-
+		//Alex
+		//gravity_speed = GRAVITY_SPEED_CONST1;
+		//x_move_speed = X_MOVE_SPEED_CONST1;
+		//jump_change_step = JUMP_CHANGE_STEP_CONST1;
 		window.display();
 		i++;
 	}
