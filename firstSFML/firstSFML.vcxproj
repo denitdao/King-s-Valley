@@ -23,7 +23,7 @@
     <ProjectGuid>{384EBE2C-FF91-4B78-A922-CB4FA666EF49}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>firstSFML</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

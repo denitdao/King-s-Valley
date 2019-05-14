@@ -1,5 +1,4 @@
-﻿#pragma once
-#include "pch.h"
+﻿#include "pch.h"
 
 class Hero : public Actor {
 	enum heroMovement move;
@@ -13,30 +12,30 @@ public:
 
 		while (window.pollEvent(_event)) {
 			switch (_event.type) {
-				case sf::Event::Closed:
-					window.close();
-				case sf::Event::KeyReleased: {
-					if (sf::Keyboard::Up)
-						upArrowPressed = false;
-					if (sf::Keyboard::Down)
-						downArrowPressed = false;
-					break;
-				}
+			case sf::Event::Closed:
+				window.close();
+			case sf::Event::KeyReleased: {
+				if (sf::Keyboard::Up)
+					upArrowPressed = false;
+				if (sf::Keyboard::Down)
+					downArrowPressed = false;
+				break;
+			}
 			}
 		}
-		
+
 		if (inJump == false && !lockJump) {
 			setDir(none);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) { // go right
 				setDir(toright);
-				if (collision != rColl && onGround) {
+				if (collision != rColl && collision==bColl) {
 					moveOn({ x_move_speed, 0 });
 				}
-				
+
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) { // go left				
 				setDir(toleft);
-				if (collision != lColl && onGround) {
+				if (collision != lColl && collision == bColl) {
 					moveOn({ x_move_speed, 0 });
 				}
 			}
@@ -46,9 +45,10 @@ public:
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) { // go stair down
 				downArrowPressed = true;
 			}
+			
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) { // jump
-			if (!lockJump && !onLeftStair && !onLeftStair)
+			if (!onLeftStair && !onLeftStair)
 				inJump = true;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
