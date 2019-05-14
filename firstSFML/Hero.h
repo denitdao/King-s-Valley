@@ -28,15 +28,30 @@ public:
 			setDir(none);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) { // go right
 				setDir(toright);
-				if (collision != rColl && collision==bColl) {
-					moveOn({ x_move_speed, 0 });
+				if (onRightStair) {
+					moveOn({ x_move_speed, -x_move_speed }); // up right
 				}
-
+				else if (onLeftStair) {
+					moveOn({ x_move_speed, x_move_speed }); // down right
+				}
+				else {
+					if (collision != rColl && collision == bColl) {
+						moveOn({ x_move_speed, 0 }); // right
+					}
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) { // go left				
 				setDir(toleft);
-				if (collision != lColl && collision == bColl) {
-					moveOn({ x_move_speed, 0 });
+				if (onLeftStair) {
+					moveOn({ x_move_speed, -x_move_speed }); // up left
+				}
+				else if (onRightStair) {
+					moveOn({ x_move_speed, x_move_speed }); // down left
+				}
+				else {
+					if (collision != lColl && collision == bColl) {
+						moveOn({ x_move_speed, 0 }); // left
+					}
 				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { // go stair up

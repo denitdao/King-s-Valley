@@ -56,14 +56,14 @@ int main() {
 			player.checkCollision(map[xMap - 1][yMap + 1]); // b l
 		}
 		
-		player.checkCollision(bot1);
-		player.checkCollision(bot2);
+		//player.checkCollision(bot1);
+		//player.checkCollision(bot2);
 
 		window.clear();
 
 		controller.drawTo(window, map);
-		bot1.drawTo(window);
-		bot2.drawTo(window);
+		//bot1.drawTo(window);
+		//bot2.drawTo(window);
 		player.drawTo(window);
 
 		/*
@@ -79,6 +79,7 @@ int main() {
 		gravity_speed = GRAVITY_SPEED_CONST;
 		x_move_speed = X_MOVE_SPEED_CONST;
 		jump_change_step = JUMP_CHANGE_STEP_CONST;
+		stair_move_speed = ((int)x_move_speed / 2 * 2 > 0) ? (int)x_move_speed / 2 * 2 : 1 ;
 		//Alex
 		//gravity_speed = GRAVITY_SPEED_CONST1;
 		//x_move_speed = X_MOVE_SPEED_CONST1;
