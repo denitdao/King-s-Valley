@@ -169,6 +169,8 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Info.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Mummy.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Hero.h" />
@@ -181,9 +183,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="level_1_blocks.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

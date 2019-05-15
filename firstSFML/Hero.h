@@ -63,7 +63,7 @@ public:
 			
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) { // jump
-			if (!onLeftStair && !onLeftStair)
+			if (!onLeftStair && !onRightStair)
 				inJump = true;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
