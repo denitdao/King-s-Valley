@@ -6,6 +6,7 @@ class Controle : public Block {
 	int y_curr_map_size;
 	int map_part = 1; // 1 or 2
 public:
+	int current_level = 1;
 	int getMapSizeX() {
 		return x_curr_map_size;
 	}
@@ -22,7 +23,7 @@ public:
 			map_part = 1;
 	}
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
-	void openMap(Block newMap[MAX_MAP_SIZE_X][MAP_SIZE_Y], const char level[30]) {
+	void openMap(Block **newMap, string level) {
 		ifstream mapPtr(level);
 		if (!mapPtr) {
 			cout << "error opening file - not exists" << endl;
@@ -42,7 +43,7 @@ public:
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(noTexture);
+					newMap[i][j].create(noTexture, current_level);
 					break;
 				}
 				case '1': {
@@ -50,7 +51,7 @@ public:
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(wall);
+					newMap[i][j].create(wall, current_level);
 					break;
 				}
 				case '2': {
@@ -58,7 +59,7 @@ public:
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairLeftUnder);
+					newMap[i][j].create(stairLeftUnder, current_level);
 					break;
 				}
 				case '3': {
@@ -66,7 +67,7 @@ public:
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairLeft);
+					newMap[i][j].create(stairLeft, current_level);
 					break;
 				}
 				case '4': {
@@ -74,7 +75,7 @@ public:
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairLeftTop);
+					newMap[i][j].create(stairLeftTop, current_level);
 					break;
 				}
 				case '5': {
@@ -82,7 +83,7 @@ public:
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairRightUnder);
+					newMap[i][j].create(stairRightUnder, current_level);
 					break;
 				}
 				case '6': {
@@ -90,7 +91,7 @@ public:
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairRight);
+					newMap[i][j].create(stairRight, current_level);
 					break;
 				}
 				case '7': {
@@ -98,7 +99,7 @@ public:
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairRightTop);
+					newMap[i][j].create(stairRightTop, current_level);
 					break;
 				}
 				case '8': {
@@ -106,15 +107,15 @@ public:
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(hardWall);
+					newMap[i][j].create(hardWall, current_level);
 					break;
 				}
-				case '10': {
+				case '*': {
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(coin);
+					newMap[i][j].create(coin, current_level);
 					break;
 				}
 				}
@@ -125,7 +126,7 @@ public:
 		}
 		mapPtr.close();
 	}
-	void drawTo(sf::RenderWindow &window, Block newMap[MAX_MAP_SIZE_X][MAP_SIZE_Y]) {
+	void drawTo(sf::RenderWindow &window, Block **newMap) {
 		int iLimit = (map_part == 1) ? MAP_SIZE_X : x_curr_map_size;
 		int iBegin = (map_part == 1) ? 0 : MAP_SIZE_X - 1;
 		

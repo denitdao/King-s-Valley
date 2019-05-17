@@ -36,7 +36,7 @@ typedef enum condition { normal, inJump, onStairs } t_condition;
 typedef enum collided { rColl, lColl, bColl, tColl, no, colliding } t_collided;
 typedef enum heroMovement {} t_heroMovement;
 typedef enum mummyMovement {} t_mummyMovement;
-typedef enum texture { noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8, bot = 9, coin = 10 } t_texture;
+typedef enum texture { noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8, bot = 9, coin = '*' } t_texture;
 
 /*
 fps locked 200 - xiaomi

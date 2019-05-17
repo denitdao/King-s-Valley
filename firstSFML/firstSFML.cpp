@@ -10,47 +10,51 @@ int main() {
 	float elapsed = 0;
 	
 	Scoreboard board;
-	Block map[MAX_MAP_SIZE_X][MAP_SIZE_Y]; // 64x24
+	Block **map = new Block*[MAX_MAP_SIZE_X];
+	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
+		map[i] = new Block[MAP_SIZE_Y];
+	}
+	//Block map[MAX_MAP_SIZE_X][MAP_SIZE_Y]; // 64x24
 	Controle level;
 	//level.openMap(map, "levels/level_1_blocks.txt");
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
 	window.setFramerateLimit(100);
 
-	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
+	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/player_left_1.png");
 	player.setPos({ 200.f, 200.f });
 
-	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
+	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	bot1.setPos({ 200.f,500.f });
-	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y });
+	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	bot2.setPos({ 350.f, 320.f });
 
 
 	// Gravity variables:
 	//bool gameBegin;
 	bool nextLevel = true;
-	int currentLevel = 3;
+	level.current_level = 0;
 
 	while (window.isOpen()) {
 		cout << "_______New Lap________" << endl;
 		if (nextLevel) {
-			switch (currentLevel) {
-			case 1: {
+			switch (level.current_level) {
+			case 0: {
 				level.openMap(map, "levels/level_1_blocks.txt");
 				break;
 			}
-			case 2: {
+			case 1: {
 				level.openMap(map, "levels/level_2_blocks.txt");
 				break;
 			}
-			case 3: {
+			case 2: {
 				level.openMap(map, "levels/level_3_blocks.txt");
 				break;
 			}
 			}
 			cout << "Change of the level" << endl;
  			nextLevel = false;
-			//Sleep(2000);
+			Sleep(2000);
 		}
 
 		player.controle(window);
@@ -130,5 +134,10 @@ int main() {
 		
 		window.display();
 	}
+	/*
+	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
+		 delete map[i];
+	}
+	delete map;*/
 	return 0;
 }

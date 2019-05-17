@@ -18,6 +18,7 @@ public:
 	void moveOn(sf::Vector2f distance) {
 		distance.x *= dir;
 		object.move(distance);
+		sprite.move(distance);
 	}
 	void setDir(enum direction d) {
 		dir = d;

@@ -8,6 +8,8 @@ using namespace std;
 class Block {
 protected:
 	sf::RectangleShape object;
+	sf::Texture texture;
+	sf::Sprite sprite;
 	t_collided collision;
 	t_texture skin = wall;
 public:
@@ -16,6 +18,17 @@ public:
 	Block(sf::Vector2f size) { //
 		object.setSize(size); //
 		object.setFillColor(sf::Color::Green);
+	}
+	Block(sf::Vector2f size, string fname) { //
+		object.setSize(size); //
+		object.setFillColor(sf::Color::Green);
+		// making sprite with the same parameters
+		if (!texture.loadFromFile(fname)) {
+			cout << "image load failed!" << endl;
+		}
+		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+		sprite.setTexture(texture);
+		sprite.setScale({size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
 	void annulateCollision() { // at the beginning of the lap, no collision
@@ -28,11 +41,14 @@ public:
 		return object.getPosition();
 	}
 	void drawTo(sf::RenderWindow &window) {
-		if (skin != noTexture)
-			window.draw(object);
+		if (skin != noTexture) {
+			//window.draw(object);
+			window.draw(sprite);
+		}
 	}
 	void setPos(sf::Vector2f newPosition) {
 		object.setPosition(newPosition);
+		sprite.setPosition(newPosition);
 	}
 	sf::Vector2f getSize() {
 		return object.getSize();
@@ -40,57 +56,141 @@ public:
 	t_texture getTexture() {
 		return skin;
 	}
-	void create(t_texture nskin) { //
+	void create(t_texture nskin, int current_level) { //
 		skin = nskin;
 		switch (skin) {
 		case noTexture: {
-			object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			sf::Vector2f size(BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::White);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile("images/empty.png")) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case wall: {
-			object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			char wall[3][40] = { "images/brick_yellow.png", "images/brick_blue.png", "images/brick_green.png" };
+			sf::Vector2f size(BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Yellow);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile(wall[current_level])) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case stairLeftUnder: {
-			object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			string wall[3] = { "images/brick_yellow.png", "images/brick_blue.png", "images/brick_green.png" };
+			sf::Vector2f size(BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Blue);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile(wall[current_level])) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case stairLeft: {
-			object.setSize({ 2 * BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			sf::Vector2f size(2 * BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Blue);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile("images/stair_left.png")) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case stairLeftTop: {
-			object.setSize({ 2 * BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			sf::Vector2f size(2 * BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Blue);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile("images/stair_left_top.png")) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case stairRightUnder: {
-			object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			string wall[3] = { "images/brick_yellow.png", "images/brick_blue.png", "images/brick_green.png" };
+			sf::Vector2f size(BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Cyan);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile(wall[current_level])) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case stairRight: {
-			object.setSize({ 2 * BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			sf::Vector2f size(2 * BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Cyan);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile("images/stair_right.png")) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case stairRightTop: {
-			object.setSize({ 2 * BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			sf::Vector2f size(2 * BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Cyan);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile("images/stair_right_top.png")) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case hardWall: {
-			object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			string wall[3] = { "images/brick_yellow.png", "images/brick_blue.png", "images/brick_green.png" };
+			sf::Vector2f size(BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Magenta);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile(wall[current_level])) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		case coin: {
-			object.setSize({ BLOCK_SIZE_X, BLOCK_SIZE_Y });
+			sf::Vector2f size(BLOCK_SIZE_X, BLOCK_SIZE_Y);
+			object.setSize(size);
 			object.setFillColor(sf::Color::Magenta);
+			// making the same parameters for sprites
+			if (!texture.loadFromFile("images/treasure_1.png")) {
+				cout << "image load failed!" << endl;
+			}
+			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+			sprite.setTexture(texture);
+			sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 			break;
 		}
 		}

@@ -2,9 +2,17 @@
 
 class Hero : public Actor {
 	enum heroMovement move;
+	string left_texture[3] = { "images/player_left_0.png", "images/player_left_1.png", "images/player_left_2.png"};
+	string right_texture[3] = { "images/player_right_0.png", "images/player_right_1.png", "images/player_right_2.png" };
 public:
-	Hero(sf::Vector2f size) : Actor(size) { //
+	Hero(sf::Vector2f size, string fname) : Actor(size) { //
 		object.setFillColor(sf::Color::Yellow);
+		if (!texture.loadFromFile(fname)) {
+			cout << "image load failed!" << endl;
+		}
+		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+		sprite.setTexture(texture);
+		sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
 	void controle(sf::RenderWindow &window) {
 		sf::Event _event;
