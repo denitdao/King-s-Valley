@@ -11,6 +11,8 @@ public:
 	bool onRightStair = false;
 	bool upArrowPressed = false;
 	bool downArrowPressed = false;
+	bool leftArrowPressed = false;
+	bool rightArrowPressed = false;
 	Actor(sf::Vector2f size) : Block(size) { //
 		object.setFillColor(sf::Color::Blue);
 		dir = none;
@@ -27,7 +29,6 @@ public:
 		yJumpSpeed = gravity_speed;
 	}
 	void jump() {
-
 		std::cout << "inJump - " << ((inJump) ? "true" : "false") << std::endl;
 		if (inJump == true) {
 			lockJump = true;
@@ -87,7 +88,7 @@ public:
 						collision = bColl;
 						lockJump = false;
 						std::cout << "bottom intersect, move Y on " << intersectY << std::endl;
-//							Now check if we are near/on the stair
+						//							Now check if we are near/on the stair
 						switch (objSkin) {
 						case stairLeftUnder: {
 							cout << "\n\nChecking stairLeftUnder\n\n" << endl;
@@ -98,12 +99,12 @@ public:
 										onLeftStair = false;
 										cout << "\n\nPlayer is now onLeftStair = F A L S E\n\n" << endl;
 									}
-									
+
 								}
 								else { // not on stair
 									if (this->dir == toleft && this->upArrowPressed) {
 										onLeftStair = true;
-										setPos({ obj2.getSenter().x - x_move_speed, this->getCoord().y}); // for more accurate process
+										setPos({ obj2.getSenter().x - x_move_speed, this->getCoord().y }); // for more accurate process
 										cout << "\n\nPlayer is now onLeftStair = T R U E\n\n" << endl;
 										break;
 									}
@@ -198,7 +199,7 @@ public:
 							cout << "Checking default" << endl;
 							if (!onLeftStair && !onRightStair)
 								setPos({ this->getCoord().x , obj2.getSenter().y - (this->getSize().y + obj2.getSize().y / 2) });
-							else if(intersectY > -x_move_speed){ // inters Y small
+							else if (intersectY > -x_move_speed) { // inters Y small
 								onLeftStair = false;
 								onRightStair = false;
 							}

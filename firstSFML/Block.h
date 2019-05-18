@@ -12,8 +12,10 @@ protected:
 	sf::Sprite sprite;
 	t_collided collision;
 	t_texture skin = wall;
+	bool coinCollected = false;
 public:
 	bool lockJump = true;
+	
 	Block() {}
 	Block(sf::Vector2f size) { //
 		object.setSize(size); //
@@ -42,13 +44,20 @@ public:
 	}
 	void drawTo(sf::RenderWindow &window) {
 		if (skin != noTexture) {
-			//window.draw(object);
-			window.draw(sprite);
+			if(xRay)
+				window.draw(object);
+			else
+				window.draw(sprite);
 		}
 	}
 	void setPos(sf::Vector2f newPosition) {
 		object.setPosition(newPosition);
-		sprite.setPosition(newPosition);
+		if(skin == stairLeft || skin == stairLeftTop)
+			sprite.setPosition({ newPosition.x + PLAYER_SIZE_X / 3, newPosition.y }); // not proper begin moving on stairs
+		else if (skin == stairRight || skin == stairRightTop)
+			sprite.setPosition({ newPosition.x - PLAYER_SIZE_X / 3, newPosition.y });
+		else
+			sprite.setPosition(newPosition);
 	}
 	sf::Vector2f getSize() {
 		return object.getSize();
@@ -194,5 +203,17 @@ public:
 			break;
 		}
 		}
+	}
+	bool hideCoin() {
+		if (!coinCollected) {
+			cout << "Not collected" << endl;
+			if (!texture.loadFromFile("images/empty.png")) {
+				cout << "image load failed!" << endl;
+			}
+			cout << "Got that coin" << endl;
+			coinCollected = true;
+		}
+		cout << "Now Collected" << endl;
+		return coinCollected;
 	}
 };

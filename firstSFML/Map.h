@@ -39,83 +39,83 @@ public:
 					mapPtr.get(ch);
 				switch (ch) {
 				case '0': {
+					newMap[i][j].create(noTexture, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(noTexture, current_level);
 					break;
 				}
 				case '1': {
+					newMap[i][j].create(wall, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(wall, current_level);
 					break;
 				}
 				case '2': {
+					newMap[i][j].create(stairLeftUnder, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairLeftUnder, current_level);
 					break;
 				}
 				case '3': {
+					newMap[i][j].create(stairLeft, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairLeft, current_level);
 					break;
 				}
 				case '4': {
+					newMap[i][j].create(stairLeftTop, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairLeftTop, current_level);
 					break;
 				}
 				case '5': {
+					newMap[i][j].create(stairRightUnder, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairRightUnder, current_level);
 					break;
 				}
 				case '6': {
+					newMap[i][j].create(stairRight, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairRight, current_level);
 					break;
 				}
 				case '7': {
+					newMap[i][j].create(stairRightTop, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ (i * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ ((i - MAP_SIZE_X) * BLOCK_SIZE_X) - (BLOCK_SIZE_X / 2), j * BLOCK_SIZE_Y });
-					newMap[i][j].create(stairRightTop, current_level);
 					break;
 				}
 				case '8': {
+					newMap[i][j].create(hardWall, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(hardWall, current_level);
 					break;
 				}
 				case '*': {
+					newMap[i][j].create(coin, current_level);
 					if (i < MAP_SIZE_X)
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					else
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					newMap[i][j].create(coin, current_level);
 					break;
 				}
 				}
@@ -133,18 +133,14 @@ public:
 		for (int j = 0; j < y_curr_map_size; j++) { // all except stair parts
 			for (int i = iBegin; i < iLimit; i++) {
 				if (newMap[i][j].getTexture() != stairLeftTop
-					&& newMap[i][j].getTexture() != stairRightTop
-					&& newMap[i][j].getTexture() != stairLeftUnder
-					&& newMap[i][j].getTexture() != stairRightUnder)
+					&& newMap[i][j].getTexture() != stairRightTop)
 					newMap[i][j].drawTo(window);
 			}
 		}
 		for (int j = 0; j < y_curr_map_size; j++) {
 			for (int i = iBegin; i < iLimit; i++) { // only stair parts
 				if (newMap[i][j].getTexture() == stairLeftTop
-					|| newMap[i][j].getTexture() == stairRightTop
-					|| newMap[i][j].getTexture() == stairLeftUnder
-					|| newMap[i][j].getTexture() == stairRightUnder)
+					|| newMap[i][j].getTexture() == stairRightTop)
 					newMap[i][j].drawTo(window);
 			}
 		}

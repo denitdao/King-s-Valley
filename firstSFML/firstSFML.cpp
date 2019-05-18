@@ -14,9 +14,7 @@ int main() {
 	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
 		map[i] = new Block[MAP_SIZE_Y];
 	}
-	//Block map[MAX_MAP_SIZE_X][MAP_SIZE_Y]; // 64x24
 	Controle level;
-	//level.openMap(map, "levels/level_1_blocks.txt");
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
 	window.setFramerateLimit(100);
@@ -25,7 +23,7 @@ int main() {
 	player.setPos({ 200.f, 200.f });
 
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
-	bot1.setPos({ 200.f,500.f });
+	bot1.setPos({ 400.f, 320.f });
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	bot2.setPos({ 350.f, 320.f });
 
@@ -33,7 +31,7 @@ int main() {
 	// Gravity variables:
 	//bool gameBegin;
 	bool nextLevel = true;
-	level.current_level = 0;
+	level.current_level = 1;
 
 	while (window.isOpen()) {
 		cout << "_______New Lap________" << endl;
@@ -88,17 +86,18 @@ int main() {
 				player.checkCollision(map[xMap - 1][yMap - 1]); // left top
 				player.checkCollision(map[xMap + 1][yMap - 1]); // right top
 				player.checkCollision(map[xMap][yMap - 1]); // top
-				if (player.checkCollision(map[xMap + 1][yMap]) == 3) // rigth
-					board.addPoint();
-				if(player.checkCollision(map[xMap - 1][yMap]) == 3) // left
-					board.addPoint();
+				player.checkCollision(map[xMap + 1][yMap]); // right
+				player.checkCollision(map[xMap - 1][yMap]); // left
+			}
+			if (player.checkCoin(map[xMap + 1][yMap + 1])) {
+				board.addPoint();
 			}
 			player.checkCollision(map[xMap + 1][yMap + 1]);// r b 
 			player.checkCollision(map[xMap - 1][yMap + 1]); // b l
 		}
-		//if (player.checkCollision(bot1) == 2) {
+		if (player.checkCollision(bot1) == 2) {
 			// you lost
-		//}
+		}
 		//if (player.checkCollision(bot2) == 2) {
 			// you lost
 		//}
@@ -111,7 +110,7 @@ int main() {
 		window.clear();
 
 		level.drawTo(window, map);
-		//bot1.drawTo(window);
+		bot1.drawTo(window);
 		//bot2.drawTo(window);
 		player.drawTo(window);
 
