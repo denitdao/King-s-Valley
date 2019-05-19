@@ -28,7 +28,7 @@ public:
 		onRightStair = false;
 		upArrowPressed = false;
 		downArrowPressed = false;
-		setPos({ 450, 250 });
+		setPos({ 448, 288 });
 	}
 	void setDir(enum direction d) {
 		dir = d;
@@ -76,11 +76,11 @@ public:
 			if (intersectX < 0.0f && intersectY < 0.0f) {
 				if (objSkin == bot)
 					return 2;
-				if (objSkin ==  coin) {
-					
-					if (obj2.hideCoin())
-						coinAmount++;
-						return 0;
+				if (objSkin == coin) {
+					obj2.hideCoin();
+					coinAmount++;
+					cout << "\n\n\nCoin amount is now " << coinAmount << endl;
+					return 0;
 					//exit(1);                               
 				}
 				std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;

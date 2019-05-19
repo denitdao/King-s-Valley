@@ -204,7 +204,7 @@ public:
 		}
 		}
 	}
-	bool hideCoin() {
+	/*bool hideCoin() {
 		if (!coinCollected) {
 			cout << "Not collected" << endl;
 			if (!texture.loadFromFile("images/empty.png")) {
@@ -215,5 +215,13 @@ public:
 		}
 		cout << "Now Collected" << endl;
 		return coinCollected;
+	}*/
+	void hideCoin() {
+		if (!texture.loadFromFile("images/empty.png")) {
+			cout << "image load failed!" << endl;
+		}
+		skin = noTexture;
+		cout << "Got that coin" << endl;
+		cout << "Now Collected" << endl;
 	}
 };

@@ -15,10 +15,26 @@ int main() {
 		map[i] = new Block[MAP_SIZE_Y];
 	}
 	Controle level;
-
+	sf::Sprite startScreen;
+	sf::Texture startTexture;
+	if (!startTexture.loadFromFile("images/ending_screen.png")) {
+		cout << "image load failed!" << endl;
+	}
+	startScreen.setTexture(startTexture);
+	startScreen.setTextureRect(sf::IntRect(0, 0, startTexture.getSize().x, startTexture.getSize().y));
+	startScreen.setScale(WINDOW_SIZE_X / startTexture.getSize().x, WINDOW_SIZE_Y / startTexture.getSize().y);
+	
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
 	window.setFramerateLimit(100);
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	
+	window.clear();
+	window.draw(startScreen);
+	window.display();
+	while (true) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			break;
+		Sleep(10);
+	}
 		Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/player_left_1.png");
 		player.setPos({ 500.f, 500.f });
 
@@ -31,32 +47,38 @@ int main() {
 		// Gravity variables:
 		//bool gameBegin;
 		bool nextLevel = true;
-		level.current_level = 1;
+		level.current_level = 0;
 
 		while (window.isOpen()) {
-			if (coinAmount == 1) {
+			if (coinAmount == 4) {
 				level.current_level++;
 				nextLevel = true;
+				coinAmount = 0;
 			}
 			cout << "_______New Lap________" << endl;
 			if (nextLevel) {
+				cout << "NEXT LEVEL" << endl;
 				switch (level.current_level) {
 				case 0: {
 					level.openMap(map, "levels/level_1_blocks.txt");
+					player.respawn();
 					break;
 				}
 				case 1: {
 					level.openMap(map, "levels/level_2_blocks.txt");
+					player.respawn();
 					break;
 				}
 				case 2: {
 					level.openMap(map, "levels/level_3_blocks.txt");
+					player.respawn();
 					break;
 				}
 				}
 				cout << "Change of the level" << endl;
 				nextLevel = false;
-				Sleep(2000);
+
+				//Sleep(2000);
 			}
 
 			player.controle(window);
@@ -93,16 +115,12 @@ int main() {
 					player.checkCollision(map[xMap + 1][yMap]); // right
 					player.checkCollision(map[xMap - 1][yMap]); // left
 				}
-				if (player.checkCoin(map[xMap + 1][yMap + 1])) {
-					board.addPoint();
-				}
 				player.checkCollision(map[xMap + 1][yMap + 1]);// r b 
 				player.checkCollision(map[xMap - 1][yMap + 1]); // b l
 			}
 
 			if (player.checkCollision(bot1) == 2) {
-				//player.respawn();
-				// you lost
+				player.respawn();
 			}
 			//if (player.checkCollision(bot2) == 2) {
 				// you lost

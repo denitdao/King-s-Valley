@@ -18,7 +18,7 @@ public:
 		sprite.setTexture(texture);
 		sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
-	bool checkCoin(Block &obj2) {
+	/*bool checkCoin(Block &obj2) {
 		cout << "Checking ";
 		if (obj2.getTexture() == coin) {
 			cout << " coin" << endl;
@@ -26,7 +26,7 @@ public:
 		}
 		cout << " not coin" << endl;
 		return false;
-	}
+	}*/
 	void chooseTexture() {
 		if (inJump == true) {
 			this->texture.loadFromFile(playerTexture[tDirection][0]);
