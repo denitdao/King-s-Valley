@@ -117,12 +117,7 @@ public:
 				inJump = true;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
-			inJump = false;
-			onLeftStair = false;
-			onRightStair = false;
-			upArrowPressed = false;
-			downArrowPressed = false;
-			setPos({ 450, 250 });
+			respawn();
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::V) && sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
 			xRay = true;

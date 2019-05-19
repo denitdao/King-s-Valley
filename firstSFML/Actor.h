@@ -22,6 +22,14 @@ public:
 		object.move(distance);
 		sprite.move(distance);
 	}
+	void respawn() {
+		inJump = false;
+		onLeftStair = false;
+		onRightStair = false;
+		upArrowPressed = false;
+		downArrowPressed = false;
+		setPos({ 450, 250 });
+	}
 	void setDir(enum direction d) {
 		dir = d;
 	}
@@ -54,30 +62,39 @@ public:
 	}
 	// more acc values can be decreased
 	int checkCollision(Block &obj2) {
+		int t=0;
 		t_texture objSkin = obj2.getTexture();
 		if (objSkin == noTexture)
-			return 0;
+			return t;
 		float deltaX = this->getSenter().x - obj2.getSenter().x;
 		float deltaY = this->getSenter().y - obj2.getSenter().y;
 		float intersectX = abs(deltaX) - (this->getSize().x / 2 + obj2.getSize().x / 2); // < 0
 		float intersectY = abs(deltaY) - (this->getSize().y / 2 + obj2.getSize().y / 2); // < 0
-
+		
+			
 		if (objSkin != stairLeft && objSkin != stairRight) {
 			if (intersectX < 0.0f && intersectY < 0.0f) {
-				std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;
 				if (objSkin == bot)
 					return 2;
-				if (objSkin == coin)
-					return 3;
+				if (objSkin ==  coin) {
+					
+					if (obj2.hideCoin())
+						coinAmount++;
+						return 0;
+					//exit(1);                               
+				}
+				std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;
 				if (intersectY < intersectX) {
 					if (deltaX < 0) { // right intersect
 						collision = rColl;
+						
 						std::cout << "right intersect, move X on " << intersectX << std::endl;
 						if (!onLeftStair && !onRightStair)
 							setPos({ obj2.getSenter().x - (this->getSize().x + obj2.getSize().x / 2) , this->getCoord().y });
 					}
 					if (deltaX > 0) { // left intersect
 						collision = lColl;
+						
 						std::cout << "left intersect, move X on " << intersectX << std::endl;
 						if (!onLeftStair && !onRightStair)
 							setPos({ obj2.getSenter().x + obj2.getSize().x / 2, this->getCoord().y });
@@ -86,6 +103,8 @@ public:
 				else {
 					if (deltaY < 0) { // bottom intersect
 						collision = bColl;
+						if (objSkin == bot)
+							respawn();
 						lockJump = false;
 						std::cout << "bottom intersect, move Y on " << intersectY << std::endl;
 						//							Now check if we are near/on the stair
@@ -209,6 +228,8 @@ public:
 					}
 					if (deltaY > 0) { // top intersect
 						collision = tColl;
+						if (objSkin == bot)
+							respawn();
 						std::cout << "top intersect, move Y on " << -intersectY << std::endl;
 						setPos({ this->getCoord().x, obj2.getSenter().y + obj2.getSize().y / 2 });
 					}
@@ -216,6 +237,7 @@ public:
 				return 1;
 			}
 		}
+		
 		std::cout << "Not colliding" << std::endl;
 		return 0;
 	}

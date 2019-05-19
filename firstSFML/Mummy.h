@@ -12,6 +12,7 @@ public:
 		}
 		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 		sprite.setTexture(texture);
+		skin = bot;
 		sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
 
