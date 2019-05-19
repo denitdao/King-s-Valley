@@ -22,6 +22,9 @@ public:
 		else
 			map_part = 1;
 	}
+	void setMapPart(int i) {
+		map_part = i;
+	}
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
 	void openMap(Block **newMap, string level) {
 		ifstream mapPtr(level);

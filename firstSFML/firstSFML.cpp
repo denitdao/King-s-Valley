@@ -60,16 +60,19 @@ int main() {
 				cout << "NEXT LEVEL" << endl;
 				switch (level.current_level) {
 				case 0: {
+					level.setMapPart(1);
 					level.openMap(map, "levels/level_1_blocks.txt");
 					player.respawn();
 					break;
 				}
 				case 1: {
+					level.setMapPart(1);
 					level.openMap(map, "levels/level_2_blocks.txt");
 					player.respawn();
 					break;
 				}
 				case 2: {
+					level.setMapPart(1);
 					level.openMap(map, "levels/level_3_blocks.txt");
 					player.respawn();
 					break;
