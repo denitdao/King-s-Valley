@@ -119,6 +119,9 @@ public:
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
 			respawn();
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			exit(1);
+		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::V) && sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
 			xRay = true;
 		}

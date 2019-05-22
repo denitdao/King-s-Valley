@@ -14,7 +14,7 @@ constexpr float BLOCK_SIZE_X = WINDOW_SIZE_X / MAP_SIZE_X;
 constexpr float BLOCK_SIZE_Y = WINDOW_SIZE_Y / MAP_SIZE_Y;
 static bool xRay = false;
 static int coinAmount = 0;
-
+static int lives = 0;
 // player settings
 constexpr float PLAYER_SIZE_X = WINDOW_SIZE_X / MAP_SIZE_X;
 constexpr float PLAYER_SIZE_Y = (WINDOW_SIZE_Y / MAP_SIZE_Y) * 2;

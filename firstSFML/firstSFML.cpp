@@ -5,36 +5,47 @@
 
 using namespace std;
 
-int main() {
+
+void changeScreen(sf::RenderWindow &window, string nameScreen) {
+	sf::Sprite startScreen;
+	sf::Texture startTexture;
+	if (!startTexture.loadFromFile(nameScreen)) {
+		cout << "image load failed!" << endl;
+	}
+	startScreen.setTexture(startTexture);
+	startScreen.setTextureRect(sf::IntRect(0, 0, startTexture.getSize().x, startTexture.getSize().y));
+	startScreen.setScale(WINDOW_SIZE_X / startTexture.getSize().x, WINDOW_SIZE_Y / startTexture.getSize().y);
+	window.clear();
+	window.draw(startScreen);
+	window.display();
+	while (true) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			
+			if (nameScreen == "images/ending_screen.png") {
+				exit(1);
+			}
+			break;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			exit(1);
+		Sleep(10);
+	}
+}
+
+
+int gamePlay(sf::RenderWindow &window) {
 	sf::Clock clock;
 	float elapsed = 0;
-	
+	window.clear();
 	Scoreboard board;
 	Block **map = new Block*[MAX_MAP_SIZE_X];
 	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
 		map[i] = new Block[MAP_SIZE_Y];
 	}
 	Controle level;
-	sf::Sprite startScreen;
-	sf::Texture startTexture;
-	if (!startTexture.loadFromFile("images/ending_screen.png")) {
-		cout << "image load failed!" << endl;
-	}
-	startScreen.setTexture(startTexture);
-	startScreen.setTextureRect(sf::IntRect(0, 0, startTexture.getSize().x, startTexture.getSize().y));
-	startScreen.setScale(WINDOW_SIZE_X / startTexture.getSize().x, WINDOW_SIZE_Y / startTexture.getSize().y);
-	
-	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
-	window.setFramerateLimit(100);
-	
-	window.clear();
-	window.draw(startScreen);
-	window.display();
-	while (true) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			break;
-		Sleep(10);
-	}
+	changeScreen(window, "images/title_screen.png");
+	lives = 3;
+	while (lives > 0) {
 		Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/player_left_1.png");
 		player.setPos({ 500.f, 500.f });
 
@@ -48,14 +59,19 @@ int main() {
 		//bool gameBegin;
 		bool nextLevel = true;
 		level.current_level = 0;
-
-		while (window.isOpen()) {
-			if (coinAmount == 4) {
+		coinAmount = 0;
+		while (window.isOpen() && lives>0) {
+			if (coinAmount == 1) {
 				level.current_level++;
 				nextLevel = true;
 				coinAmount = 0;
 			}
+			if (level.current_level == 3) {
+				changeScreen(window, "images/ending_screen.png");
+			}
+
 			cout << "_______New Lap________" << endl;
+			cout << "_____________LIVES_______" << lives << endl;
 			if (nextLevel) {
 				cout << "NEXT LEVEL" << endl;
 				switch (level.current_level) {
@@ -108,7 +124,7 @@ int main() {
 			cout << "In map part = " << level.getMapPart() << endl;
 
 			player.annulateCollision(); // if won't be any collisions, value won't change from 'no'
-			// checking collision of player
+										// checking collision of player
 			player.checkCollision(map[xMap][yMap + 1]); // bottom
 			if (!player.onLeftStair && !player.onRightStair) {
 				if (player.inJump == false) {
@@ -124,9 +140,10 @@ int main() {
 
 			if (player.checkCollision(bot1) == 2) {
 				player.respawn();
+				lives--;
 			}
 			//if (player.checkCollision(bot2) == 2) {
-				// you lost
+			// you lost
 			//}
 
 
@@ -155,15 +172,35 @@ int main() {
 			jump_change_step = JUMP_CHANGE_STEP_CONST1;*/
 			//Denys
 			gravity_speed = GRAVITY_SPEED_CONST;
-			x_move_speed = X_MOVE_SPEED_CONST;
+			x_move_speed = X_MOVE_SPEED_CONST1;
 			jump_change_step = JUMP_CHANGE_STEP_CONST;
 
 			window.display();
 		}
-		/*
-		for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
-			 delete map[i];
+	}
+
+	/*
+	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
+	delete map[i];
+	}
+	delete map;*/
+	
+	changeScreen(window, "images/game_over.png");
+	return level.current_level;
+}
+
+
+
+
+
+
+
+int main() {
+		sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
+		window.setFramerateLimit(100);
+		while (true) {
+			gamePlay(window);
+			Sleep(100);
 		}
-		delete map;*/
 		return 0;
 	}
