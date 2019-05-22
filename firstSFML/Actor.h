@@ -6,6 +6,7 @@ protected:
 	t_direcrion dir;
 	float yJumpSpeed = gravity_speed;
 public:
+	int xMap, yMap;
 	bool inJump = false;
 	bool onLeftStair = false;
 	bool onRightStair = false;
@@ -62,7 +63,7 @@ public:
 	}
 	// more acc values can be decreased
 	int checkCollision(Block &obj2) {
-		int t=0;
+		int t = 0;
 		t_texture objSkin = obj2.getTexture();
 		if (objSkin == noTexture)
 			return t;
@@ -87,7 +88,6 @@ public:
 				if (intersectY < intersectX) {
 					if (deltaX < 0) { // right intersect
 						collision = rColl;
-						
 						std::cout << "right intersect, move X on " << intersectX << std::endl;
 						if (!onLeftStair && !onRightStair)
 							setPos({ obj2.getSenter().x - (this->getSize().x + obj2.getSize().x / 2) , this->getCoord().y });

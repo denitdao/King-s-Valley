@@ -46,3 +46,10 @@ constexpr float GRAVITY_SPEED_CONST = -2.7f;
 constexpr float X_MOVE_SPEED_CONST = 1.5f;
 constexpr float JUMP_CHANGE_STEP_CONST = 0.04f;
 */
+
+/*
+fps locked 100 - xiaomi
+constexpr float GRAVITY_SPEED_CONST = -4.1f;
+constexpr float X_MOVE_SPEED_CONST = 1.4f;
+constexpr float JUMP_CHANGE_STEP_CONST = 0.09f;
+*/

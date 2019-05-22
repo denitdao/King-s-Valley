@@ -18,15 +18,6 @@ public:
 		sprite.setTexture(texture);
 		sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
-	/*bool checkCoin(Block &obj2) {
-		cout << "Checking ";
-		if (obj2.getTexture() == coin) {
-			cout << " coin" << endl;
-			return obj2.hideCoin();
-		}
-		cout << " not coin" << endl;
-		return false;
-	}*/
 	void chooseTexture() {
 		if (inJump == true) {
 			this->texture.loadFromFile(playerTexture[tDirection][0]);
@@ -44,6 +35,22 @@ public:
 			if (textureCounter >= 3)
 				textureCounter = 0;
 		}
+	}
+	void autoMoveOn(sf::Vector2f distance, t_direcrion autoDir) {
+		distance.x *= autoDir;
+		if (autoDir == toleft) {
+			tDirection = leftTexture;
+			leftArrowPressed = true;
+			rightArrowPressed = false;
+		}
+		if (autoDir == toright) {
+			tDirection = rightTexture;
+			rightArrowPressed = true;
+			leftArrowPressed = false;
+		}
+		object.move(distance);
+		sprite.move(distance);
+		chooseTexture();
 	}
 	void controle(sf::RenderWindow &window) {
 		sf::Event _event;
