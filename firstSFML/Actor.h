@@ -7,6 +7,7 @@ protected:
 	float yJumpSpeed = gravity_speed;
 public:
 	int xMap, yMap;
+	bool coinAmountIncrease = false;
 	bool inJump = false;
 	bool onLeftStair = false;
 	bool onRightStair = false;
@@ -79,10 +80,8 @@ public:
 					return 2;
 				if (objSkin == coin) {
 					obj2.hideCoin();
-					coinAmount++;
-					cout << "\n\n\nCoin amount is now " << coinAmount << endl;
-					return 0;
-					//exit(1);                               
+					coinAmountIncrease = true;
+					return 0;                              
 				}
 				std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;
 				if (intersectY < intersectX) {

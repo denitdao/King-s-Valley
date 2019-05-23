@@ -58,8 +58,10 @@ public:
 
 		while (window.pollEvent(_event)) {
 			switch (_event.type) {
-			case sf::Event::Closed:
+			case sf::Event::Closed: {
 				window.close();
+				exit(0);
+			}
 			case sf::Event::KeyReleased: {
 				if (sf::Keyboard::Up) 
 					upArrowPressed = false;
