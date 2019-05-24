@@ -243,7 +243,7 @@ public:
 			}
 		}
 		
-		std::cout << "Not colliding" << std::endl;
+		//std::cout << "Not colliding" << std::endl;
 		return 0;
 	}
 };

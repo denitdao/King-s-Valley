@@ -36,7 +36,7 @@ public:
 	}
 	void annulatePoint() {
 		score = 0;
-		lives = 3;
+		lives = LIVES_CONST;
 		fillTable();
 	}
 	void fillTable() {

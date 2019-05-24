@@ -83,7 +83,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
 		map[i] = new Block[MAP_SIZE_Y];
 	}
-	lives = 3;
+	lives = LIVES_CONST;
 	changeScreen(window, "images/title_screen.png");
 	player.respawn();
 	
