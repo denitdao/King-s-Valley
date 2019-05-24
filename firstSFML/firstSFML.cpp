@@ -89,7 +89,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	
 
 	bool nextLevel = true; // load level
-	level.current_level = 1; // first level - 0
+	level.current_level = 0; // first level - 0
 	int coinAmount = 0;
 	while (window.isOpen() && lives > 0) {
 		cout << "_______New Lap________" << endl;
@@ -98,7 +98,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			board.addPoint(500);
 			player.coinAmountIncrease = false;
 		}
-		if (coinAmount == 2) { // collected enough coins
+		if (coinAmount == 4) { // collected enough coins
 			level.current_level++;
 			nextLevel = true; // load level
 			coinAmount = 0;

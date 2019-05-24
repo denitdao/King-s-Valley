@@ -13,7 +13,7 @@ constexpr int MAP_SIZE_Y = 24;
 constexpr float BLOCK_SIZE_X = WINDOW_SIZE_X / MAP_SIZE_X;
 constexpr float BLOCK_SIZE_Y = WINDOW_SIZE_Y / MAP_SIZE_Y;
 static bool xRay = false;
-static int lives = 3;
+static int lives = 4;
 // player settings
 constexpr float PLAYER_SIZE_X = WINDOW_SIZE_X / MAP_SIZE_X;
 constexpr float PLAYER_SIZE_Y = (WINDOW_SIZE_Y / MAP_SIZE_Y) * 2;
