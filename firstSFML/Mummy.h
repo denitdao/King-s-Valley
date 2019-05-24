@@ -3,7 +3,7 @@
 
 class Mummy : public Actor {
 	enum mummyMovement move;
-	string mummyTexture[2][3] = { { "images/mummy_left_0.png", "images/mummy_left_1.png", "images/mummy_2.png" },
+	string mummyTexture[2][3] = { { "images/mummy_left_0.png", "images/mummy_left_1.png", "images/mummy_left_2.png" },
 	{ "images/mummy_right_0.png", "images/mummy_right_1.png", "images/mummy_right_2.png" } };
 	t_textureDir tDirection = leftTexture;
 	int textureCounter = 1;
@@ -15,6 +15,7 @@ public:
 		if (!texture.loadFromFile(fname)) {
 			cout << "image load failed!" << endl;
 		}
+		dir = toleft;
 		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 		sprite.setTexture(texture);
 		skin = bot;
@@ -39,7 +40,8 @@ public:
 		}
 	}
 	void autoMoveOn(sf::Vector2f distance) {
-		distance.x *= dir;
+		if (rand() % 700 == 2) 
+			dir = (dir == toleft) ? toright : toleft;
 		if (dir == toleft) {
 			tDirection = leftTexture;
 			leftArrowPressed = true;
@@ -50,11 +52,7 @@ public:
 			rightArrowPressed = true;
 			leftArrowPressed = false;
 		}
-		
-		object.move(distance);
-		sprite.move(distance);
+		moveOn(distance);
 		chooseTexture();
-		
-			
 	}
 };

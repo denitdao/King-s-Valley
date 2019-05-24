@@ -204,24 +204,11 @@ public:
 		}
 		}
 	}
-	/*bool hideCoin() {
-		if (!coinCollected) {
-			cout << "Not collected" << endl;
-			if (!texture.loadFromFile("images/empty.png")) {
-				cout << "image load failed!" << endl;
-			}
-			cout << "Got that coin" << endl;
-			coinCollected = true;
-		}
-		cout << "Now Collected" << endl;
-		return coinCollected;
-	}*/
 	void hideCoin() {
 		if (!texture.loadFromFile("images/empty.png")) {
 			cout << "image load failed!" << endl;
 		}
 		skin = noTexture;
 		cout << "Got that coin" << endl;
-		cout << "Now Collected" << endl;
 	}
 };

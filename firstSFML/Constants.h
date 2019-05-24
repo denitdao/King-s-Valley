@@ -24,7 +24,7 @@ static float x_move_speed = 0.f;
 static float jump_change_step = 0.f;
 static float stair_move_speed = 0.f;
 //Denys
-constexpr float GRAVITY_SPEED_CONST = -4.5f;
+constexpr float GRAVITY_SPEED_CONST = -4.1f;
 constexpr float X_MOVE_SPEED_CONST = 1.4f;
 constexpr float JUMP_CHANGE_STEP_CONST = 0.09f;
 //Alex

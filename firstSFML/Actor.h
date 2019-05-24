@@ -5,9 +5,10 @@ class Actor : public Block {
 protected:
 	t_direcrion dir;
 	float yJumpSpeed = gravity_speed;
+	sf::Vector2f respawnPos;
+	bool isPlayer = false;
 public:
 	int xMap, yMap;
-	sf::Vector2f respawnPos = {100.f,100.f};
 	bool coinAmountIncrease = false;
 	bool inJump = false;
 	bool onLeftStair = false;
@@ -24,6 +25,9 @@ public:
 		distance.x *= dir;
 		object.move(distance);
 		sprite.move(distance);
+	}
+	void setRespawn(sf::Vector2i coord) {
+		respawnPos = {coord.x * BLOCK_SIZE_X, coord.y * BLOCK_SIZE_Y - BLOCK_SIZE_Y };
 	}
 	void respawn() {
 		inJump = false;
@@ -65,10 +69,9 @@ public:
 	}
 	// more acc values can be decreased
 	int checkCollision(Block &obj2) {
-		int t = 0;
 		t_texture objSkin = obj2.getTexture();
 		if (objSkin == noTexture)
-			return t;
+			return 4;
 		float deltaX = this->getSenter().x - obj2.getSenter().x;
 		float deltaY = this->getSenter().y - obj2.getSenter().y;
 		float intersectX = abs(deltaX) - (this->getSize().x / 2 + obj2.getSize().x / 2); // < 0
@@ -79,9 +82,12 @@ public:
 				if (objSkin == bot)
 					return 2;
 				if (objSkin == coin) {
-					obj2.hideCoin();
-					coinAmountIncrease = true;
-					return 0;                              
+					if (isPlayer) {
+						obj2.hideCoin();
+						coinAmountIncrease = true;
+						return 3;                              
+					}
+					return 0;
 				}
 				std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;
 				if (intersectY < intersectX) {

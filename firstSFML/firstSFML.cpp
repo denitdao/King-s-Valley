@@ -5,6 +5,27 @@
 
 using namespace std;
 
+void botCheckCollision(Actor &bot, Block **map, int mapPart) {
+
+	bot.xMap = bot.getSenter().x / BLOCK_SIZE_X;
+	bot.yMap = bot.getSenter().y / BLOCK_SIZE_X;
+	if (mapPart == 2)
+		bot.xMap += 32;
+	if (bot.checkCollision(map[bot.xMap + 1][bot.yMap + 1]) == 4) // r b 
+		bot.setDir(toleft);
+	if(bot.checkCollision(map[bot.xMap - 1][bot.yMap + 1]) == 4) // b l
+		bot.setDir(toright);
+	if(bot.checkCollision(map[bot.xMap + 1][bot.yMap]) == 1) // right
+		bot.setDir(toleft);
+	if(bot.checkCollision(map[bot.xMap - 1][bot.yMap]) == 1) // left
+		bot.setDir(toright);
+	if (bot.xMap >= 61)
+		bot.setDir(toleft);
+	if (bot.xMap <= 1)
+		bot.setDir(toright);
+	bot.annulateCollision();
+}
+
 void changeScreen(sf::RenderWindow &window, string sceneName) {
 	sf::Event _event;
 	sf::Texture sceneTexture;
@@ -55,7 +76,6 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	window.clear();
 	Controle level;
 	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/player_left_1.png");
-	player.respawnPos = { 448, 288 };
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	Mummy bot3({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
@@ -69,17 +89,16 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	
 
 	bool nextLevel = true; // load level
-	level.current_level = 0; // first level
+	level.current_level = 1; // first level - 0
 	int coinAmount = 0;
 	while (window.isOpen() && lives > 0) {
 		cout << "_______New Lap________" << endl;
-		cout << "__________LIVES_______" << lives << endl;
-		if (player.coinAmountIncrease == true) { // gor one coin - increase
+		if (player.coinAmountIncrease == true) { // got one coin - increase
 			coinAmount++;
 			board.addPoint(500);
 			player.coinAmountIncrease = false;
 		}
-		if (coinAmount == 1) { // collected enough coins
+		if (coinAmount == 2) { // collected enough coins
 			level.current_level++;
 			nextLevel = true; // load level
 			coinAmount = 0;
@@ -89,9 +108,14 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			cout << "NEXT LEVEL" << endl;
 			switch (level.current_level) {
 			case 0: { // first level
+				player.setRespawn({ 16, 10 });
 				player.respawn();
-				bot1.respawnPos={ 300.f, 320.f };
+				bot1.setRespawn({ 7, 2 });
 				bot1.respawn();
+				bot2.setRespawn({ 7, 12 });
+				bot2.respawn();
+				bot3.setRespawn({ 7, 21 });
+				bot3.respawn();
 				level.setMapPart(1);
 				level.openMap(map, "levels/level_1_blocks.txt");
 				nextLevel = false;
@@ -100,7 +124,14 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			}
 			case 1: { // second level
 				board.addPoint(2000);
+				player.setRespawn({ 16, 7 });
 				player.respawn();
+				bot1.setRespawn({ 7, 2 });
+				bot1.respawn();
+				bot2.setRespawn({ 10, 10 });
+				bot2.respawn();
+				bot3.setRespawn({ 27, 20 });
+				bot3.respawn();
 				level.setMapPart(1);
 				level.openMap(map, "levels/level_2_blocks.txt");
 				nextLevel = false;
@@ -109,7 +140,14 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			}
 			case 2: { // third level
 				board.addPoint(2000);
+				player.setRespawn({ 16, 11 });
 				player.respawn();
+				bot1.setRespawn({ 7, 2 });
+				bot1.respawn();
+				bot2.setRespawn({ 28, 11 });
+				bot2.respawn();
+				bot3.setRespawn({ 27, 20 });
+				bot3.respawn();
 				level.setMapPart(1);
 				level.openMap(map, "levels/level_3_blocks.txt");
 				nextLevel = false;
@@ -130,18 +168,42 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 
 		player.controle(window); // get user input
 		bot1.autoMoveOn({ x_move_speed, 0 });
+		bot2.autoMoveOn({ x_move_speed, 0 });
+		bot3.autoMoveOn({ x_move_speed, 0 });
+		botCheckCollision(bot1, map, level.getMapPart());
+		botCheckCollision(bot2, map, level.getMapPart());
+		botCheckCollision(bot3, map, level.getMapPart());
+
 		player.xMap = player.getSenter().x / BLOCK_SIZE_X;
 		player.yMap = player.getSenter().y / BLOCK_SIZE_X;
 
 		if (level.getMapSizeX() > 32) { // if map consists of 2+ parts
-			if (player.xMap == 31 && level.getMapPart() == 1) {
+			if (player.xMap == 31 && level.getMapPart() == 1) { // to second part
 				player.setPos({ player.getSize().x, player.getCoord().y });
 				player.xMap = player.getSenter().x / BLOCK_SIZE_X; // recalculate 
+				if (level.current_level == 1) {
+					player.setRespawn({ 13, 13 });
+					bot1.setRespawn({ 16, 8 });
+					bot1.respawn();
+					bot2.setRespawn({ 27, 16 });
+					bot2.respawn();
+					bot3.setRespawn({ 17, 20 });
+					bot3.respawn();
+				}
 				level.changeMapPart();
 			}
-			else if (player.xMap == 0 && level.getMapPart() == 2) {
+			else if (player.xMap == 0 && level.getMapPart() == 2) { // to first part
 				player.setPos({ WINDOW_SIZE_X - player.getSize().x * 2.f, player.getCoord().y });
 				player.xMap = player.getSenter().x / BLOCK_SIZE_X; // recalculate
+				if (level.current_level == 1) {
+					player.setRespawn({ 16, 11 });
+					bot1.setRespawn({ 7, 2 });
+					bot1.respawn();
+					bot2.setRespawn({ 10, 10 });
+					bot2.respawn();
+					bot3.setRespawn({ 27, 20 });
+					bot3.respawn();
+				}
 				level.changeMapPart();
 			}
 		}
@@ -154,7 +216,6 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			player.xMap += 32;
 		}
 		cout << "xMap = " << player.xMap << " yMap = " << player.yMap << endl;
-		cout << "In map part = " << level.getMapPart() << endl;
 
 		player.annulateCollision(); // if won't be any collisions, value won't change from 'no'
 		// checking collision of player
@@ -163,7 +224,6 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			if (player.inJump == false) {
 				player.checkCollision(map[player.xMap - 1][player.yMap - 1]); // left top
 				player.checkCollision(map[player.xMap + 1][player.yMap - 1]); // right top
-				player.checkCollision(map[player.xMap][player.yMap - 1]); // top
 				player.checkCollision(map[player.xMap + 1][player.yMap]); // right
 				player.checkCollision(map[player.xMap - 1][player.yMap]); // left
 			}
@@ -178,14 +238,12 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			board.looseHeart();
 		}
 
-		bot1.annulateCollision();
-		bot2.annulateCollision();
-		bot3.annulateCollision();
 		window.clear();
 
 		level.drawTo(window, map);
 		bot1.drawTo(window);
-		//bot2.drawTo(window);
+		bot2.drawTo(window);
+		bot3.drawTo(window);
 		player.drawTo(window);
 		board.drawTo(window);
 

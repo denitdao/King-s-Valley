@@ -14,6 +14,7 @@ public:
 		if (!texture.loadFromFile(fname)) {
 			cout << "image load failed!" << endl;
 		}
+		isPlayer = true;
 		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 		sprite.setTexture(texture);
 		sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
