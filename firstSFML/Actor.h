@@ -7,6 +7,7 @@ protected:
 	float yJumpSpeed = gravity_speed;
 public:
 	int xMap, yMap;
+	sf::Vector2f respawnPos = {100.f,100.f};
 	bool coinAmountIncrease = false;
 	bool inJump = false;
 	bool onLeftStair = false;
@@ -30,7 +31,7 @@ public:
 		onRightStair = false;
 		upArrowPressed = false;
 		downArrowPressed = false;
-		setPos({ 448, 288 });
+		setPos(respawnPos);
 	}
 	void setDir(enum direction d) {
 		dir = d;
@@ -72,7 +73,6 @@ public:
 		float deltaY = this->getSenter().y - obj2.getSenter().y;
 		float intersectX = abs(deltaX) - (this->getSize().x / 2 + obj2.getSize().x / 2); // < 0
 		float intersectY = abs(deltaY) - (this->getSize().y / 2 + obj2.getSize().y / 2); // < 0
-		
 			
 		if (objSkin != stairLeft && objSkin != stairRight) {
 			if (intersectX < 0.0f && intersectY < 0.0f) {

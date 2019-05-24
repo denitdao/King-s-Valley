@@ -55,8 +55,10 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	window.clear();
 	Controle level;
 	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/player_left_1.png");
+	player.respawnPos = { 448, 288 };
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
+	Mummy bot3({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	Block **map = new Block*[MAX_MAP_SIZE_X];
 	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
 		map[i] = new Block[MAP_SIZE_Y];
@@ -64,8 +66,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	lives = 3;
 	changeScreen(window, "images/title_screen.png");
 	player.respawn();
-	bot1.setPos({ 400.f, 288.f });
-	bot2.setPos({ 350.f, 320.f });
+	
 
 	bool nextLevel = true; // load level
 	level.current_level = 0; // first level
@@ -89,6 +90,8 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			switch (level.current_level) {
 			case 0: { // first level
 				player.respawn();
+				bot1.respawnPos={ 300.f, 320.f };
+				bot1.respawn();
 				level.setMapPart(1);
 				level.openMap(map, "levels/level_1_blocks.txt");
 				nextLevel = false;
@@ -126,7 +129,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		}
 
 		player.controle(window); // get user input
-
+		bot1.autoMoveOn({ x_move_speed, 0 });
 		player.xMap = player.getSenter().x / BLOCK_SIZE_X;
 		player.yMap = player.getSenter().y / BLOCK_SIZE_X;
 
@@ -167,17 +170,17 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			player.checkCollision(map[player.xMap + 1][player.yMap + 1]);// r b 
 			player.checkCollision(map[player.xMap - 1][player.yMap + 1]); // b l
 		}
-		if (player.checkCollision(bot1) == 2) {
+		if (player.checkCollision(bot1) == 2 || player.checkCollision(bot2) == 2 || player.checkCollision(bot3) == 2) {
 			player.respawn();
+			bot1.respawn();
+			bot2.respawn();
+			bot3.respawn();
 			board.looseHeart();
 		}
-		//if (player.checkCollision(bot2) == 2) {
-		// you lost
-		//}
 
 		bot1.annulateCollision();
 		bot2.annulateCollision();
-
+		bot3.annulateCollision();
 		window.clear();
 
 		level.drawTo(window, map);
