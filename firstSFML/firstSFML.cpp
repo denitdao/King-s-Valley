@@ -217,7 +217,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 				player.setPos({ WINDOW_SIZE_X - player.getSize().x * 2.f, player.getCoord().y });
 				player.xMap = player.getSenter().x / BLOCK_SIZE_X; // recalculate
 				if (level.current_level == 1) {
-					player.setRespawn({ 16, 11 });
+					player.setRespawn({ 16, 9 });
 					bot1.setRespawn({ 7, 2 });
 					bot1.respawn();
 					bot2.setRespawn({ 10, 10 });
