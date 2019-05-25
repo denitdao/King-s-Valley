@@ -18,7 +18,7 @@ public:
 		score = 0;
 		topScore = 0;
 		if (!gameFont.loadFromFile("fonts/ponderosa.regular.ttf"))
-			cout << "Failed loading fonts" << endl;
+			myLog(Logger::ERR) << "Failed loading fonts" << endl;
 		gameData.setFont(gameFont);
 		gameData.setCharacterSize(BLOCK_SIZE_Y / 4 * 3);
 		gameData.setFillColor(sf::Color::White);

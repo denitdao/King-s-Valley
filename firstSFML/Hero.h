@@ -12,7 +12,7 @@ public:
 	Hero(sf::Vector2f size, string fname) : Actor(size) { //
 		object.setFillColor(sf::Color::Yellow);
 		if (!texture.loadFromFile(fname)) {
-			cout << "image load failed!" << endl;
+			myLog(Logger::ERR) << "image load failed!" << endl;
 		}
 		isPlayer = true;
 		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));

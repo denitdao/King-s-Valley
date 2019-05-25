@@ -29,11 +29,11 @@ public:
 	void openMap(Block **newMap, string level) {
 		ifstream mapPtr(level);
 		if (!mapPtr) {
-			cout << "error opening file - not exists" << endl;
+			myLog(Logger::ERR) << "error opening file - not exists" << endl;
 			exit(1);
 		}
 		mapPtr >> x_curr_map_size >> y_curr_map_size;
-		cout << "map size is " << x_curr_map_size << " x " << y_curr_map_size << endl;
+		myLog(Logger::INFO) << "map size is " << x_curr_map_size << " x " << y_curr_map_size << endl;
 		char ch;
 		for (int j = 0; j < y_curr_map_size; j++) {
 			for (int i = 0; i < x_curr_map_size; i++) {
@@ -122,10 +122,10 @@ public:
 					break;
 				}
 				}
-				cout << ch;
+				myLog(Logger::INFO) << ch;
 			}
 			mapPtr.get(ch); // to read \n symbol
-			cout << endl;
+			myLog(Logger::INFO) << endl;
 		}
 		mapPtr.close();
 	}

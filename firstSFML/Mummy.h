@@ -13,7 +13,7 @@ public:
 	Mummy(sf::Vector2f size, string fname) : Actor(size) { // 
 		object.setFillColor(sf::Color::White);
 		if (!texture.loadFromFile(fname)) {
-			cout << "image load failed!" << endl;
+			myLog(Logger::ERR) << "image load failed!" << endl;
 		}
 		dir = toleft;
 		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));

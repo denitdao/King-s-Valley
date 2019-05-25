@@ -6,7 +6,6 @@
 using namespace std;
 
 void botCheckCollision(Actor &bot, Block **map, int mapPart) {
-
 	bot.xMap = bot.getSenter().x / BLOCK_SIZE_X;
 	bot.yMap = bot.getSenter().y / BLOCK_SIZE_X;
 	if (mapPart == 2)
@@ -31,7 +30,7 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 	sf::Texture sceneTexture;
 	sf::Sprite sceneScreen;
 	if (!sceneTexture.loadFromFile(sceneName)) {
-		cout << "image load failed!" << endl;
+		myLog(Logger::ERR) << "image load failed!" << endl;
 	}
 	sceneScreen.setTexture(sceneTexture);
 	sceneScreen.setTextureRect(sf::IntRect(0, 0, sceneTexture.getSize().x, sceneTexture.getSize().y));
@@ -56,8 +55,10 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 				endGamePlayer.drawTo(window);
 				window.display();
 			}
-			Sleep(200);
-			cout << "Returning from the ending screen" << endl;
+			myLog(Logger::INFO) << "Returning from the ending screen" << endl;
+			GameMusic soundOneUp("sounds/OneUp.wav", false);
+			soundOneUp.playSound();
+			Sleep(1000);
 			return;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
@@ -75,6 +76,14 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	window.clear();
 	Controle level;
+	GameMusic soundStartGame("sounds/StartGame.wav", false);
+	soundStartGame.playSound();
+	GameMusic soundPlaying("sounds/Playing.wav", true);
+	GameMusic soundTreasure("sounds/Treasure.wav", false);
+	GameMusic soundNextMap("sounds/NextMap.wav", false);
+	GameMusic soundCaught("sounds/Caught.wav", false);
+	GameMusic soundCollectedAll("sounds/CollectedAll.wav", false);
+
 	Hero player({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/player_left_1.png");
 	Mummy bot1({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
 	Mummy bot2({ PLAYER_SIZE_X, PLAYER_SIZE_Y }, "images/mummy_left_1.png");
@@ -84,28 +93,37 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		map[i] = new Block[MAP_SIZE_Y];
 	}
 	lives = LIVES_CONST;
-	changeScreen(window, "images/title_screen.png");
 	player.respawn();
-	
-
+	changeScreen(window, "images/title_screen.png");
+	soundStartGame.stopSound();
+	soundPlaying.playSound();
 	bool nextLevel = true; // load level
+	bool loadedNextLevel = false;
 	level.current_level = 0; // first level - 0
 	int coinAmount = 0;
 	while (window.isOpen() && lives > 0) {
-		cout << "_______New Lap________" << endl;
+		myLog(Logger::DEBUG) << "_______New Lap________" << endl;
 		if (player.coinAmountIncrease == true) { // got one coin - increase
+			soundTreasure.playSound();
 			coinAmount++;
 			board.addPoint(500);
 			player.coinAmountIncrease = false;
 		}
 		if (coinAmount == 4) { // collected enough coins
+			soundPlaying.stopSound();
+			soundCollectedAll.playSound();
 			level.current_level++;
 			nextLevel = true; // load level
 			coinAmount = 0;
+			Sleep(3000);
 		}
-
+		if (loadedNextLevel) {
+			loadedNextLevel = false;
+			Sleep(3000);
+			soundPlaying.playSound();
+		}
 		if (nextLevel) { // need to load
-			cout << "NEXT LEVEL" << endl;
+			myLog(Logger::INFO) << "NEXT LEVEL" << endl;
 			switch (level.current_level) {
 			case 0: { // first level
 				player.setRespawn({ 16, 10 });
@@ -123,8 +141,10 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 				break;
 			}
 			case 1: { // second level
+				soundNextMap.playSound();
+				loadedNextLevel = true;
 				board.addPoint(2000);
-				player.setRespawn({ 16, 7 });
+				player.setRespawn({ 16, 9 });
 				player.respawn();
 				bot1.setRespawn({ 7, 2 });
 				bot1.respawn();
@@ -139,6 +159,8 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 				break;
 			}
 			case 2: { // third level
+				soundNextMap.playSound();
+				loadedNextLevel = true;
 				board.addPoint(2000);
 				player.setRespawn({ 16, 11 });
 				player.respawn();
@@ -162,8 +184,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 				return level.current_level; // finish gameplay
 			}
 			}
-			cout << "LOADED" << endl;
-			Sleep(1000);
+			myLog(Logger::DEBUG) << "LOADED" << endl;
 		}
 
 		player.controle(window); // get user input
@@ -215,7 +236,8 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		if (level.getMapPart() == 2) { // second half of map array
 			player.xMap += 32;
 		}
-		cout << "xMap = " << player.xMap << " yMap = " << player.yMap << endl;
+		//clog << "xMap = " << player.xMap << " yMap = " << player.yMap << endl;
+		myLog(Logger::INFO) << "xMap = " << player.xMap << " yMap = " << player.yMap << endl;
 
 		player.annulateCollision(); // if won't be any collisions, value won't change from 'no'
 		// checking collision of player
@@ -231,11 +253,15 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			player.checkCollision(map[player.xMap - 1][player.yMap + 1]); // b l
 		}
 		if (player.checkCollision(bot1) == 2 || player.checkCollision(bot2) == 2 || player.checkCollision(bot3) == 2) {
+			soundPlaying.stopSound();
+			soundCaught.playSound();
+			Sleep(1000);
 			player.respawn();
 			bot1.respawn();
 			bot2.respawn();
 			bot3.respawn();
 			board.looseHeart();
+			soundPlaying.playSound();
 		}
 
 		window.clear();
@@ -247,10 +273,6 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		player.drawTo(window);
 		board.drawTo(window);
 
-		/*//Alex
-		gravity_speed = GRAVITY_SPEED_CONST1;
-		x_move_speed = X_MOVE_SPEED_CONST1;
-		jump_change_step = JUMP_CHANGE_STEP_CONST1;*/
 		//Denys
 		gravity_speed = GRAVITY_SPEED_CONST;
 		x_move_speed = X_MOVE_SPEED_CONST; // add const 1 for alex
@@ -259,21 +281,26 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		window.display();
 	}
 	// game ended with win or lives ended
+	soundPlaying.stopSound();
 	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
 		delete[] map[i]; // delete sub-array
 	}
 	delete[] map; // delete main array
-
+	
+	GameMusic soundGameOver("sounds/GameOver.wav", false);
+	soundGameOver.playSound();
 	changeScreen(window, "images/game_over.png"); // play
-
+	soundGameOver.stopSound();
+	
 	return level.current_level;
 }
 
 int main() {
 	Scoreboard board;
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
-	window.setFramerateLimit(100);
-	
+	//window.setFramerateLimit(100);
+	window.setFramerateLimit(60);
+
 	while (true) {
 		board.annulatePoint();
 		board.fillTable();

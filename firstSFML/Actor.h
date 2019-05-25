@@ -44,18 +44,19 @@ public:
 		yJumpSpeed = gravity_speed;
 	}
 	void jump() {
-		std::cout << "inJump - " << ((inJump) ? "true" : "false") << std::endl;
+		myLog(Logger::DEBUG) << "inJump - " << ((inJump) ? "true" : "false") << endl;
+
 		if (inJump == true) {
 			lockJump = true;
 			moveOn({ x_move_speed, yJumpSpeed });
-			std::cout << "Jumping on { " << x_move_speed << " ; " << yJumpSpeed << " }" << std::endl;
+			myLog(Logger::DEBUG) << "Jumping on { " << x_move_speed << " ; " << yJumpSpeed << " }" << endl;
 			yJumpSpeed += jump_change_step;
 			if (yJumpSpeed >= 10)
 				yJumpSpeed = 0;
 		}
 		else {
 			if (!onLeftStair && !onRightStair) {
-				std::cout << "Falling down, Y  " << -gravity_speed << std::endl;
+				myLog(Logger::DEBUG) << "Falling down, Y  " << -gravity_speed << std::endl;
 				moveOn({ 0, -gravity_speed });
 				lockJump = true;
 			}
@@ -89,18 +90,18 @@ public:
 					}
 					return 0;
 				}
-				std::cout << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << std::endl;
+				myLog(Logger::DEBUG) << "Colliding | intersectX = " << intersectX << "| intersectY = " << intersectY << endl;
 				if (intersectY < intersectX) {
 					if (deltaX < 0) { // right intersect
 						collision = rColl;
-						std::cout << "right intersect, move X on " << intersectX << std::endl;
+						myLog(Logger::DEBUG) << "right intersect, move X on " << intersectX << endl;
 						if (!onLeftStair && !onRightStair)
 							setPos({ obj2.getSenter().x - (this->getSize().x + obj2.getSize().x / 2) , this->getCoord().y });
 					}
 					if (deltaX > 0) { // left intersect
 						collision = lColl;
 						
-						std::cout << "left intersect, move X on " << intersectX << std::endl;
+						myLog(Logger::DEBUG) << "left intersect, move X on " << intersectX << endl;
 						if (!onLeftStair && !onRightStair)
 							setPos({ obj2.getSenter().x + obj2.getSize().x / 2, this->getCoord().y });
 					}
@@ -111,17 +112,17 @@ public:
 						if (objSkin == bot)
 							respawn();
 						lockJump = false;
-						std::cout << "bottom intersect, move Y on " << intersectY << std::endl;
+						myLog(Logger::DEBUG) << "bottom intersect, move Y on " << intersectY << std::endl;
 						//							Now check if we are near/on the stair
 						switch (objSkin) {
 						case stairLeftUnder: {
-							cout << "\n\nChecking stairLeftUnder\n\n" << endl;
+							myLog(Logger::DEBUG) << "\n\nChecking stairLeftUnder\n\n" << endl;
 							if (obj2.getSenter().x - x_move_speed <= this->getCoord().x && obj2.getSenter().x >= this->getCoord().x) { // senter of stair block = left side + 1 of the player
-								cout << "\n\nSenter\n\n" << endl;
+								myLog(Logger::DEBUG) << "\n\nSenter\n\n" << endl;
 								if (onLeftStair) {
 									if (this->dir == toright) {
 										onLeftStair = false;
-										cout << "\n\nPlayer is now onLeftStair = F A L S E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onLeftStair = F A L S E\n\n" << endl;
 									}
 
 								}
@@ -129,7 +130,7 @@ public:
 									if (this->dir == toleft && this->upArrowPressed) {
 										onLeftStair = true;
 										setPos({ obj2.getSenter().x - x_move_speed, this->getCoord().y }); // for more accurate process
-										cout << "\n\nPlayer is now onLeftStair = T R U E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onLeftStair = T R U E\n\n" << endl;
 										break;
 									}
 									else
@@ -140,20 +141,20 @@ public:
 							break;
 						}
 						case stairLeftTop: {
-							cout << "\n\nChecking stairLeftTop\n\n" << endl;
+							myLog(Logger::DEBUG) << "\n\nChecking stairLeftTop\n\n" << endl;
 							if (obj2.getSenter().x - x_move_speed <= this->getCoord().x && obj2.getSenter().x >= this->getCoord().x) { // senter of stair block = left side of the player
-								cout << "\n\nSenter\n\n" << endl;
+								myLog(Logger::DEBUG) << "\n\nSenter\n\n" << endl;
 								if (onLeftStair) {
 									if (this->dir == toleft) {
 										onLeftStair = false;
-										cout << "\n\nPlayer is now onLeftStair = F A L S E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onLeftStair = F A L S E\n\n" << endl;
 									}
 								}
 								else { // not on stair
 									if (this->dir == toright && this->downArrowPressed) {
 										onLeftStair = true;
 										setPos({ obj2.getSenter().x - x_move_speed, this->getCoord().y });  // for more accurate process
-										cout << "\n\nPlayer is now onLeftStair = T R U E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onLeftStair = T R U E\n\n" << endl;
 										break;
 									}
 									else
@@ -164,20 +165,20 @@ public:
 							break;
 						}
 						case stairRightUnder: {
-							cout << "\n\nChecking stairRightUnder\n\n" << endl;
+							myLog(Logger::DEBUG) << "\n\nChecking stairRightUnder\n\n" << endl;
 							if (obj2.getSenter().x <= this->getCoord().x + this->getSize().x && obj2.getSenter().x + x_move_speed >= this->getCoord().x + this->getSize().x) { // senter of stair block = right side of the player
-								cout << "\n\nSenter\n\n" << endl;
+								myLog(Logger::DEBUG) << "\n\nSenter\n\n" << endl;
 								if (onRightStair) {
 									if (this->dir == toleft) {
 										onRightStair = false;
-										cout << "\n\nPlayer is now onRightStair = F A L S E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onRightStair = F A L S E\n\n" << endl;
 									}
 								}
 								else { // not on stair
 									if (this->dir == toright && this->upArrowPressed) {
 										onRightStair = true;
 										setPos({ obj2.getSenter().x - this->getSize().x + x_move_speed, this->getCoord().y }); // for more accurate process
-										cout << "\n\nPlayer is now onRightStair = T R U E\n\n" << endl; ///!!!!!!!!!!!!!!!!!!!
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onRightStair = T R U E\n\n" << endl; ///!!!!!!!!!!!!!!!!!!!
 										break;
 									}
 									else
@@ -188,20 +189,20 @@ public:
 							break;
 						}
 						case stairRightTop: {
-							cout << "\n\nChecking stairRightTop\n\n" << endl;
+							myLog(Logger::DEBUG) << "\n\nChecking stairRightTop\n\n" << endl;
 							if (obj2.getSenter().x <= this->getCoord().x + this->getSize().x && obj2.getSenter().x + x_move_speed >= this->getCoord().x + this->getSize().x) { // senter of stair block = right side of the player
-								cout << "\n\nSenter\n\n" << endl;
+								myLog(Logger::DEBUG) << "\n\nSenter\n\n" << endl;
 								if (onRightStair) {
 									if (this->dir == toright) {
 										onRightStair = false;
-										cout << "\n\nPlayer is now onRightStair = F A L S E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onRightStair = F A L S E\n\n" << endl;
 									}
 								}
 								else { // not on stair
 									if (this->dir == toleft && this->downArrowPressed) {
 										onRightStair = true;
 										setPos({ obj2.getSenter().x - this->getSize().x - x_move_speed, this->getCoord().y }); // for more accurate process
-										cout << "\n\nPlayer is now onRightStair = T R U E\n\n" << endl;
+										myLog(Logger::DEBUG) << "\n\nPlayer is now onRightStair = T R U E\n\n" << endl;
 										break;
 									}
 									else
@@ -220,7 +221,7 @@ public:
 							break;
 						}
 						default: {
-							cout << "Checking default" << endl;
+							myLog(Logger::DEBUG) << "Checking default" << endl;
 							if (!onLeftStair && !onRightStair)
 								setPos({ this->getCoord().x , obj2.getSenter().y - (this->getSize().y + obj2.getSize().y / 2) });
 							else if (intersectY > -x_move_speed) { // inters Y small
@@ -235,7 +236,7 @@ public:
 						collision = tColl;
 						if (objSkin == bot)
 							respawn();
-						std::cout << "top intersect, move Y on " << -intersectY << std::endl;
+						myLog(Logger::DEBUG) << "top intersect, move Y on " << -intersectY << std::endl;
 						setPos({ this->getCoord().x, obj2.getSenter().y + obj2.getSize().y / 2 });
 					}
 				}
@@ -243,7 +244,7 @@ public:
 			}
 		}
 		
-		//std::cout << "Not colliding" << std::endl;
+		myLog(Logger::DEBUG) << "Not colliding" << std::endl;
 		return 0;
 	}
 };

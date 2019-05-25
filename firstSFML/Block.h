@@ -26,7 +26,7 @@ public:
 		object.setFillColor(sf::Color::Green);
 		// making sprite with the same parameters
 		if (!texture.loadFromFile(fname)) {
-			cout << "image load failed!" << endl;
+			myLog(Logger::ERR) << "image load failed!" << endl;
 		}
 		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 		sprite.setTexture(texture);
@@ -74,7 +74,7 @@ public:
 			object.setFillColor(sf::Color::White);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile("images/empty.png")) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -88,7 +88,7 @@ public:
 			object.setFillColor(sf::Color::Yellow);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile(wall[current_level])) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -102,7 +102,7 @@ public:
 			object.setFillColor(sf::Color::Blue);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile(wall[current_level])) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -115,7 +115,7 @@ public:
 			object.setFillColor(sf::Color::Blue);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile("images/stair_left.png")) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -128,7 +128,7 @@ public:
 			object.setFillColor(sf::Color::Blue);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile("images/stair_left_top.png")) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -142,7 +142,7 @@ public:
 			object.setFillColor(sf::Color::Cyan);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile(wall[current_level])) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -155,7 +155,7 @@ public:
 			object.setFillColor(sf::Color::Cyan);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile("images/stair_right.png")) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -168,7 +168,7 @@ public:
 			object.setFillColor(sf::Color::Cyan);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile("images/stair_right_top.png")) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -182,7 +182,7 @@ public:
 			object.setFillColor(sf::Color::Magenta);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile(wall[current_level])) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -195,7 +195,7 @@ public:
 			object.setFillColor(sf::Color::Magenta);
 			// making the same parameters for sprites
 			if (!texture.loadFromFile("images/treasure_1.png")) {
-				cout << "image load failed!" << endl;
+				myLog(Logger::ERR) << "image load failed!" << endl;
 			}
 			sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 			sprite.setTexture(texture);
@@ -206,9 +206,9 @@ public:
 	}
 	void hideCoin() {
 		if (!texture.loadFromFile("images/empty.png")) {
-			cout << "image load failed!" << endl;
+			myLog(Logger::ERR) << "image load failed!" << endl;
 		}
 		skin = noTexture;
-		cout << "Got that coin" << endl;
+		myLog(Logger::INFO) << "Got that coin" << endl;
 	}
 };
