@@ -38,6 +38,8 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 	window.clear();
 	window.draw(sceneScreen);
 	window.display();
+	_event.type = sf::Event::GainedFocus; // to avoid empty stack
+	// if stack is empty, event window closed will auto work
 	while (window.isOpen()) {
 		window.pollEvent(_event);
 		if (sceneName == "images/ending_screen.png") { // special behaviour on end screen
@@ -47,6 +49,7 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 				window.pollEvent(_event);
 				if (_event.type == sf::Event::Closed) {
 					window.close();
+					cout << "closing" << endl;
 					exit(0);
 				}
 				endGamePlayer.autoMoveOn({ x_move_speed, 0 }, toright);
@@ -187,7 +190,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			myLog(Logger::DEBUG) << "LOADED" << endl;
 		}
 
-		player.controle(window); // get user input
+		player.controle(window, board); // get user input
 		bot1.autoMoveOn({ x_move_speed, 0 });
 		bot2.autoMoveOn({ x_move_speed, 0 });
 		bot3.autoMoveOn({ x_move_speed, 0 });
@@ -246,6 +249,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			if (player.inJump == false) {
 				player.checkCollision(map[player.xMap - 1][player.yMap - 1]); // left top
 				player.checkCollision(map[player.xMap + 1][player.yMap - 1]); // right top
+				player.checkCollision(map[player.xMap][player.yMap - 1]); // top
 				player.checkCollision(map[player.xMap + 1][player.yMap]); // right
 				player.checkCollision(map[player.xMap - 1][player.yMap]); // left
 			}
@@ -295,7 +299,11 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	return level.current_level;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+	if (argc == 2) {
+		myLog.ChangeMaxLogLevel(atoi(argv[1]));
+	}
+	
 	Scoreboard board;
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
 	//window.setFramerateLimit(100);

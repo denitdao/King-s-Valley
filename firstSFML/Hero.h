@@ -53,7 +53,7 @@ public:
 		sprite.move(distance);
 		chooseTexture();
 	}
-	void controle(sf::RenderWindow &window) {
+	void controle(sf::RenderWindow &window, Scoreboard &board) {
 		sf::Event _event;
 		// keypress detection
 
@@ -64,17 +64,28 @@ public:
 				exit(0);
 			}
 			case sf::Event::KeyReleased: {
-				if (sf::Keyboard::Up) 
+				if (_event.key.code == sf::Keyboard::Up) {
 					upArrowPressed = false;
-				if (sf::Keyboard::Down) 
+					myLog(Logger::DEBUG) << "Key up released" << endl;
+				}
+				if (_event.key.code == sf::Keyboard::Down) {
 					downArrowPressed = false;
-				if (sf::Keyboard::Left) {
+					myLog(Logger::DEBUG) << "Key down released" << endl;
+				}
+				if (_event.key.code == sf::Keyboard::Left) {
 					textureCounter = 1;
 					leftArrowPressed = false;
+					myLog(Logger::DEBUG) << "Key Left released" << endl;
 				}
-				if (sf::Keyboard::Right) {
+				if (_event.key.code == sf::Keyboard::Right) {
 					textureCounter = 1;
 					rightArrowPressed = false;
+					myLog(Logger::DEBUG) << "Key Right released" << endl;
+				}
+				if (_event.key.code == sf::Keyboard::H) {
+					this->respawn();
+					board.looseHeart();
+					myLog(Logger::DEBUG) << "Key H released" << endl;
 				}
 				break;
 			}

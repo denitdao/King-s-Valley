@@ -64,7 +64,10 @@ public:
 		m_stream << output;
 		return *this;
 	}
-
+	void ChangeMaxLogLevel(int step) {
+		m_maxLogLevel = step;
+		(*this)(INFO) << "Max logger mode - " << m_maxLogLevel << endl;
+	}
 	// to finish getting input and flush it into the stream
 	Logger& operator<<(ManipFn manip) { // endl, flush, setw, setfill, etc.
 		manip(m_stream);
