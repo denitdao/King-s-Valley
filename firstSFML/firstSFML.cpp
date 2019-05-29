@@ -24,7 +24,7 @@ void botCheckCollision(Actor &bot, Block **map, int mapPart) {
 		bot.setDir(toright);
 	bot.annulateCollision();
 }
-
+// show beginning, ending screens, wait for space or close
 void changeScreen(sf::RenderWindow &window, string sceneName) {
 	sf::Event _event;
 	sf::Texture sceneTexture;
@@ -52,7 +52,7 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 					cout << "closing" << endl;
 					exit(0);
 				}
-				endGamePlayer.autoMoveOn({ x_move_speed, 0 }, toright);
+				endGamePlayer.autoMoveOn({ X_MOVE_SPEED, 0 }, toright);
 				window.clear();
 				window.draw(sceneScreen);
 				endGamePlayer.drawTo(window);
@@ -75,7 +75,7 @@ void changeScreen(sf::RenderWindow &window, string sceneName) {
 		Sleep(50);
 	}
 }
-
+// play sounds, draw player, map, bots, load levels
 int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 	window.clear();
 	Controle level;
@@ -96,7 +96,6 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		map[i] = new Block[MAP_SIZE_Y];
 	}
 	lives = LIVES_CONST;
-	player.respawn();
 	changeScreen(window, "images/title_screen.png");
 	soundStartGame.stopSound();
 	soundPlaying.playSound();
@@ -129,6 +128,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			myLog(Logger::INFO) << "NEXT LEVEL" << endl;
 			switch (level.current_level) {
 			case 0: { // first level
+				// new respawn positions
 				player.setRespawn({ 16, 10 });
 				player.respawn();
 				bot1.setRespawn({ 7, 2 });
@@ -145,7 +145,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 			}
 			case 1: { // second level
 				soundNextMap.playSound();
-				loadedNextLevel = true;
+				loadedNextLevel = true; // to show map and start playing intro music
 				board.addPoint(2000);
 				player.setRespawn({ 16, 9 });
 				player.respawn();
@@ -191,15 +191,15 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		}
 
 		player.controle(window, board); // get user input
-		bot1.autoMoveOn({ x_move_speed, 0 });
-		bot2.autoMoveOn({ x_move_speed, 0 });
-		bot3.autoMoveOn({ x_move_speed, 0 });
+		bot1.autoMoveOn({ X_MOVE_SPEED, 0 });
+		bot2.autoMoveOn({ X_MOVE_SPEED, 0 });
+		bot3.autoMoveOn({ X_MOVE_SPEED, 0 });
 		botCheckCollision(bot1, map, level.getMapPart());
 		botCheckCollision(bot2, map, level.getMapPart());
 		botCheckCollision(bot3, map, level.getMapPart());
 
 		player.xMap = player.getSenter().x / BLOCK_SIZE_X;
-		player.yMap = player.getSenter().y / BLOCK_SIZE_X;
+		player.yMap = player.getSenter().y / BLOCK_SIZE_Y;
 
 		if (level.getMapSizeX() > 32) { // if map consists of 2+ parts
 			if (player.xMap == 31 && level.getMapPart() == 1) { // to second part
@@ -239,7 +239,7 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		if (level.getMapPart() == 2) { // second half of map array
 			player.xMap += 32;
 		}
-		//clog << "xMap = " << player.xMap << " yMap = " << player.yMap << endl;
+
 		myLog(Logger::INFO) << "xMap = " << player.xMap << " yMap = " << player.yMap << endl;
 
 		player.annulateCollision(); // if won't be any collisions, value won't change from 'no'
@@ -276,15 +276,9 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 		bot3.drawTo(window);
 		player.drawTo(window);
 		board.drawTo(window);
-
-		//Denys
-		gravity_speed = GRAVITY_SPEED_CONST;
-		x_move_speed = X_MOVE_SPEED_CONST; // add const 1 for alex
-		jump_change_step = JUMP_CHANGE_STEP_CONST;
-
 		window.display();
 	}
-	// game ended with win or lives ended
+	// game ended with lives ended
 	soundPlaying.stopSound();
 	for (int i = 0; i < MAX_MAP_SIZE_X; i++) {
 		delete[] map[i]; // delete sub-array
@@ -300,14 +294,13 @@ int gamePlay(sf::RenderWindow &window, Scoreboard &board) {
 }
 
 int main(int argc, char* argv[]) {
-	if (argc == 2) {
+	if (argc == 2) { // get log level as cmd argument
 		myLog.ChangeMaxLogLevel(atoi(argv[1]));
 	}
 	
 	Scoreboard board;
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "King's Valley", sf::Style::Default);
-	//window.setFramerateLimit(100);
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(FPS_LOCK);
 
 	while (true) {
 		board.annulatePoint();

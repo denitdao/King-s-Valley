@@ -8,7 +8,7 @@ using namespace std;
 class Block {
 protected:
 	sf::RectangleShape object;
-	sf::Texture texture;
+	sf::Texture texture; // pointer to a picture
 	sf::Sprite sprite;
 	t_collided collision;
 	t_texture skin = wall;
@@ -16,33 +16,40 @@ protected:
 public:
 	bool lockJump = true;
 	
-	Block() {}
-	Block(sf::Vector2f size) { //
-		object.setSize(size); //
+	// create instance of the class without initializing
+	Block() {} 
+	// initialize shape
+	Block(sf::Vector2f size) { 
+		object.setSize(size); 
 		object.setFillColor(sf::Color::Green);
 	}
-	Block(sf::Vector2f size, string fname) { //
-		object.setSize(size); //
+	// initialize shape and set texture
+	Block(sf::Vector2f size, string fname) { 
+		object.setSize(size); 
 		object.setFillColor(sf::Color::Green);
 		// making sprite with the same parameters
 		if (!texture.loadFromFile(fname)) {
 			myLog(Logger::ERR) << "image load failed!" << endl;
 		}
-		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
+		sprite.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y)); // load full picture
 		sprite.setTexture(texture);
 		sprite.setScale({size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
-	void annulateCollision() { // at the beginning of the lap, no collision
+	// at the beginning of the lap, no collision
+	void annulateCollision() { 
 		collision = no;
 	}
-	sf::Vector2f getSenter() { // return center of shape
+	// return the coords of the senter of shape
+	sf::Vector2f getSenter() { 
 		return { object.getPosition().x + object.getSize().x / 2 , object.getPosition().y + object.getSize().y / 2 };
 	}
-	sf::Vector2f getCoord() {
-		return object.getPosition();
+	// return the coords of the top left corner of shape
+	sf::Vector2f getCoord() { 
+ 		return object.getPosition();
 	}
-	void drawTo(sf::RenderWindow &window) {
+	// draw shape or texture to the window
+	void drawTo(sf::RenderWindow &window) { 
 		if (skin != noTexture) {
 			if(xRay)
 				window.draw(object);
@@ -50,7 +57,8 @@ public:
 				window.draw(sprite);
 		}
 	}
-	void setPos(sf::Vector2f newPosition) {
+	// move the top left corner of shape 
+	void setPos(sf::Vector2f newPosition) { 
 		object.setPosition(newPosition);
 		if(skin == stairLeft || skin == stairLeftTop)
 			sprite.setPosition({ newPosition.x + PLAYER_SIZE_X / 3, newPosition.y }); // not proper begin moving on stairs
@@ -59,13 +67,16 @@ public:
 		else
 			sprite.setPosition(newPosition);
 	}
-	sf::Vector2f getSize() {
+	// get height and width
+	sf::Vector2f getSize() { 
 		return object.getSize();
 	}
-	t_texture getTexture() {
+	// get enum of the current texture
+	t_texture getTexture() { 
 		return skin;
 	}
-	void create(t_texture nskin, int current_level) { //
+	// initialize texture enum, shape, coose and set texture
+	void create(t_texture nskin, int current_level) { 
 		skin = nskin;
 		switch (skin) {
 		case noTexture: {
@@ -204,7 +215,8 @@ public:
 		}
 		}
 	}
-	void hideCoin() {
+	// set empty texture to coin
+	void hideCoin() { 
 		if (!texture.loadFromFile("images/empty.png")) {
 			myLog(Logger::ERR) << "image load failed!" << endl;
 		}

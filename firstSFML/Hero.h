@@ -1,16 +1,15 @@
 ﻿#include "pch.h"
 
 class Hero : public Actor {
-	enum heroMovement move;
 	string playerTexture[2][3] = { { "images/player_left_0.png", "images/player_left_1.png", "images/player_left_2.png" }, 
 								  { "images/player_right_0.png", "images/player_right_1.png", "images/player_right_2.png" } };
-	t_textureDir tDirection = leftTexture;
-	int textureCounter = 1;
+	t_textureDir tDirection = leftTexture; // enum to choose part of the first dimention of the texture array
+	int textureCounter = 1; // counter to choose texture in the second dimention of the texture array
 	float lastPositionX;
-	const float deltaPositionX = 10.f;
 public:
-	Hero(sf::Vector2f size, string fname) : Actor(size) { //
-		object.setFillColor(sf::Color::Yellow);
+	// initialize sprite whith a texture
+	Hero(sf::Vector2f size, string fname) : Actor(size) { 
+ 		object.setFillColor(sf::Color::Yellow);
 		if (!texture.loadFromFile(fname)) {
 			myLog(Logger::ERR) << "image load failed!" << endl;
 		}
@@ -19,7 +18,8 @@ public:
 		sprite.setTexture(texture);
 		sprite.setScale({ size.x / texture.getSize().x , size.y / texture.getSize().y });
 	}
-	void chooseTexture() {
+	// change textures while moving
+	void chooseTexture() { 
 		if (inJump == true) {
 			this->texture.loadFromFile(playerTexture[tDirection][0]);
 		}
@@ -30,13 +30,14 @@ public:
 		else {
 			this->texture.loadFromFile(playerTexture[tDirection][textureCounter]);
 		}
-		if (abs(lastPositionX - this->getCoord().x) >= deltaPositionX) {
+		if (abs(lastPositionX - this->getCoord().x) >= CHANGE_TEXTURE_DELTA_X) {
 			lastPositionX = this->getCoord().x;
 			textureCounter++;
 			if (textureCounter >= 3)
 				textureCounter = 0;
 		}
 	}
+	// auto move player
 	void autoMoveOn(sf::Vector2f distance, t_direcrion autoDir) {
 		distance.x *= autoDir;
 		if (autoDir == toleft) {
@@ -53,9 +54,9 @@ public:
 		sprite.move(distance);
 		chooseTexture();
 	}
+	// keypress detection
 	void controle(sf::RenderWindow &window, Scoreboard &board) {
 		sf::Event _event;
-		// keypress detection
 
 		while (window.pollEvent(_event)) {
 			switch (_event.type) {
@@ -99,14 +100,14 @@ public:
 				tDirection = rightTexture;
 				rightArrowPressed = true;
 				if (onRightStair) {
-					moveOn({ x_move_speed, -x_move_speed }); // up right
+					moveOn({ X_MOVE_SPEED, -X_MOVE_SPEED }); // up right
 				}
 				else if (onLeftStair) {
-					moveOn({ x_move_speed, x_move_speed }); // down right
+					moveOn({ X_MOVE_SPEED, X_MOVE_SPEED }); // down right
 				}
 				else {
 					if (collision != rColl && collision == bColl) {
-						moveOn({ x_move_speed, 0 }); // right
+						moveOn({ X_MOVE_SPEED, 0 }); // right
 					}
 				}
 			}
@@ -115,14 +116,14 @@ public:
 				tDirection = leftTexture;
 				leftArrowPressed = true;
 				if (onLeftStair) {
-					moveOn({ x_move_speed, -x_move_speed }); // up left
+					moveOn({ X_MOVE_SPEED, -X_MOVE_SPEED }); // up left
 				}
 				else if (onRightStair) {
-					moveOn({ x_move_speed, x_move_speed }); // down left
+					moveOn({ X_MOVE_SPEED, X_MOVE_SPEED }); // down left
 				}
 				else {
 					if (collision != lColl && collision == bColl) {
-						moveOn({ x_move_speed, 0 }); // left
+						moveOn({ X_MOVE_SPEED, 0 }); // left
 					}
 				}
 			}
@@ -136,9 +137,6 @@ public:
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) { // jump
 			if (!onLeftStair && !onRightStair)
 				inJump = true;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
-			respawn();
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 			exit(1);

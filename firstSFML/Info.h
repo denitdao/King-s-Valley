@@ -14,6 +14,7 @@ class Scoreboard {
 	int score, topScore;
 	string str1 = "SCORE-", str2 = " HI-", str3 = " REST-0", str_score, str_top_score, str_rest; // 17 letters + 17 numbers
 public:
+	// initialize gameData, set font size, color, outline...
 	Scoreboard() {
 		score = 0;
 		topScore = 0;
@@ -39,20 +40,22 @@ public:
 		lives = LIVES_CONST;
 		fillTable();
 	}
+	// convert ints into strings and add them to the table
 	void fillTable() {
-		stringstream ss;
-		ss.setf(ios::right);
-		ss.width(6);
+		stringstream ss; // stream
+		ss.setf(ios::right); // formatting to make 000000
+		ss.width(6); 
 		ss.fill('0');
 		ss << score;
-		str_score = ss.str();
-		if (score >= topScore) {
+		str_score = ss.str(); // to get data stored in ss
+		if (score >= topScore) { // increase top score
 			topScore = score;
 			str_top_score = str_score;
 		}
-		str_rest = to_string(lives);
-		gameData.setString(str1 + str_score + str2 + str_top_score + str3 + str_rest);
+		str_rest = to_string(lives); // int -> string
+		gameData.setString(str1 + str_score + str2 + str_top_score + str3 + str_rest); // make sentence
 	}
+	// draw game info on to the screen
 	void drawTo(sf::RenderWindow &window) {
 		window.draw(gameData);
 	}

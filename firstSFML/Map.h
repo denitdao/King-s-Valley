@@ -26,13 +26,14 @@ public:
 		map_part = i;
 	}
 	//noTexture = 0, wall = 1, stairLeftUnder = 2, stairLeft = 3, stairLeftTop = 4, stairRightUnder = 5, stairRight = 6, stairRightTop = 7, hardWall = 8
+	// read file and init blocks with sprites
 	void openMap(Block **newMap, string level) {
 		ifstream mapPtr(level);
 		if (!mapPtr) {
 			myLog(Logger::ERR) << "error opening file - not exists" << endl;
 			exit(1);
 		}
-		mapPtr >> x_curr_map_size >> y_curr_map_size;
+		mapPtr >> x_curr_map_size >> y_curr_map_size; // get map sizes
 		myLog(Logger::INFO) << "map size is " << x_curr_map_size << " x " << y_curr_map_size << endl;
 		char ch;
 		for (int j = 0; j < y_curr_map_size; j++) {
@@ -115,9 +116,9 @@ public:
 				}
 				case '*': {
 					newMap[i][j].create(coin, current_level);
-					if (i < MAP_SIZE_X)
+					if (i < MAP_SIZE_X) // first map part
 						newMap[i][j].setPos({ i * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
-					else
+					else  // second map part
 						newMap[i][j].setPos({ (i - MAP_SIZE_X) * BLOCK_SIZE_X, j * BLOCK_SIZE_Y });
 					break;
 				}
@@ -129,9 +130,10 @@ public:
 		}
 		mapPtr.close();
 	}
+	// draw all map to the screen
 	void drawTo(sf::RenderWindow &window, Block **newMap) {
-		int iLimit = (map_part == 1) ? MAP_SIZE_X : x_curr_map_size;
-		int iBegin = (map_part == 1) ? 0 : MAP_SIZE_X - 1;
+		int iLimit = (map_part == 1) ? MAP_SIZE_X : x_curr_map_size; // set limitation depending on map part
+		int iBegin = (map_part == 1) ? 0 : MAP_SIZE_X - 1; // set limitation depending on map part
 		
 		for (int j = 0; j < y_curr_map_size; j++) { // all except stair parts
 			for (int i = iBegin; i < iLimit; i++) {

@@ -1,59 +1,26 @@
 #pragma once
 #include "pch.h"
 #include <iostream>
-#include <ctime>
 #include <sstream>
 #include <string>
 
 using namespace std;
 
-//typedef enum log_type { log_none, log_error, log_warning, log_info, log_debug } t_log_type;
-
-/*class Log {
-	static int m_logLevel;
-	time_t t = time(NULL);
-
-public:
-	static void setLevel(t_log_type logLevel) {
-		m_logLevel = logLevel;
-	}
-	Log& operator<<(t_log_type manip) /// setiosflags, resetiosflags
-	{
-		//manip(m_stream);
-		return *this;
-	}
-	static string printTime() {
-		time_t rawtime;
-		tm * timeInfo;
-		char buffer[26];
-
-		time(&rawtime);
-		timeInfo = localtime(&rawtime);
-
-		strftime(buffer, 26, "%Y-%m-%d %H:%M:%S", timeInfo);
-		return buffer;
-	}
-	static void write(t_log_type log_level, string message) {
-		if (log_level <= m_logLevel) {
-			char buffer[255];
-			//clog << '[' << log_level << ']' << message << endl;
-			clog << sprintf(buffer, "%s [%d] %s", printTime().c_str(), log_level, message.c_str()) << endl;
-		}
-	}
-};
-*/
 class Logger {
+	stringstream m_stream; // storage
+	int m_logLevel; // current output logging level
+	int m_defLogLevel; // in no logging level entered, then m_logLevel = m_defLogLevel
+	int m_maxLogLevel; // filter messages with logging level > than m_maxLogLevel
 public:
-	typedef ostream&  (*ManipFn)(ostream&);
-	typedef ios_base& (*FlagsFn)(ios_base&);
-
-	enum LogLevel {
+	typedef ostream&  (*ManipFn)(ostream&); // means we will get manipulators as function arguments
+	// enum with logging levels
+	enum LogLevel { 
 		ERR,
 		WARN,
 		INFO,
 		DEBUG
 	};
-
+	// initialize default and max log levels
 	Logger(LogLevel defLogLevel, LogLevel maxLogLevel) {
 		m_defLogLevel = m_logLevel = defLogLevel;
 		m_maxLogLevel = maxLogLevel;
@@ -64,13 +31,14 @@ public:
 		m_stream << output;
 		return *this;
 	}
+	// set new max log level
 	void ChangeMaxLogLevel(int step) {
 		m_maxLogLevel = step;
-		(*this)(INFO) << "Max logger mode - " << m_maxLogLevel << endl;
+		(*this)(INFO) << "Max logger mode - " << m_maxLogLevel << endl; // message
 	}
 	// to finish getting input and flush it into the stream
 	Logger& operator<<(ManipFn manip) { // endl, flush, setw, setfill, etc.
-		manip(m_stream);
+		manip(m_stream); // apply manipulators to our string stream
 
 		if (manip == static_cast<ManipFn>(std::flush)
 			|| manip == static_cast<ManipFn>(endl))
@@ -78,22 +46,15 @@ public:
 
 		return *this;
 	}
-	// get format flags
-	Logger& operator<<(FlagsFn manip) { // setiosflags, resetiosflags
-		manip(m_stream);
-		return *this;
-	}
 	// get log level
 	Logger& operator()(LogLevel e) {
 		m_logLevel = e;
 		return *this;
 	}
-
+	// write message to the console / file ...
 	void flush() {
 		/*
-		  m_stream.str() has your full message here.
-		  Good place to prepend time, log-level.
-		  Send to console, file, socket, or whatever you like here.
+		  m_stream.str() has full message here.
 		*/
 
 		if (m_logLevel <= m_maxLogLevel) {
@@ -101,13 +62,7 @@ public:
 		}
 
 		m_logLevel = m_defLogLevel; // if no log level entered
-		m_stream.str(std::string());
-		m_stream.clear();
+		m_stream.str(string()); // clear buffer
+		m_stream.clear(); // clear the error state
 	}
-
-private:
-	stringstream m_stream; // storage
-	int m_logLevel;
-	int m_defLogLevel;
-	int m_maxLogLevel;
 };
